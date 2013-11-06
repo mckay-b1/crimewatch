@@ -1,0 +1,86 @@
+body {
+    font-family: Calibri, Arial, sans-serif;
+    background-color: #333333;
+    color: #FFFFFF;
+}
+
+/*Header styling*/
+header h1 {
+    font-size: 60pt;
+    margin: 0;
+}
+
+header h1 span.alt {
+    color: #0066CC;
+}
+
+header img#crosshair {
+    position: relative;
+    top: 12px;
+    right: 4px;
+}
+
+header #tagline {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+header div#banner {
+    background: url('../pix/checkered.gif') repeat-x left top;
+    height: 50px;
+    width: 100%;
+}
+
+div#content {
+    background-color: #0066CC;
+    padding: 20px 0;
+}
+
+div#search {
+    height: 70px;
+    width: 100%;
+}
+
+div#search form {
+    text-align: center;
+}
+
+div#search input {
+    border: 4px solid #333333;
+    border-radius: 4px;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 16pt;
+    font-weight: bold;
+    height: 30px;
+    padding: 0 0 0 10px;
+    width: 50%;
+}
+
+img#do_search {
+    background-color: #333333;
+    border: 4px solid #FFFFFF;
+    border-radius: 4px;
+    padding: 4px;
+    position: relative;
+    top: 12px;
+    width: 25px;
+}
+
+img#do_search:hover {
+    cursor: pointer;
+    box-shadow: 2px 2px 2px #333333;
+}
+
+div#map {
+    display: none;
+    border: 4px solid #333333;
+    border-radius: 4px;
+    height: 400px;
+    margin: auto;
+    width: 600px;
+}
+
+footer {
+    font-weight: bold;
+    text-align: center;
+}
