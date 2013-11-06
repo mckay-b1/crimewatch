@@ -71,6 +71,13 @@ img#do_search:hover {
     box-shadow: 2px 2px 2px #333333;
 }
 
+img#ajax-loader {
+    visi: none;
+    left: 4px;
+    position: relative;
+    top: 8px;
+}
+
 div#map {
     display: none;
     border: 4px solid #333333;
@@ -83,4 +90,12 @@ div#map {
 footer {
     font-weight: bold;
     text-align: center;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.hide {
+    display: none;
 }

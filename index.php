@@ -22,6 +22,7 @@
                 <form name="search" method="post" action="ajax/search.php">
                     <input type="text" name="address" placeholder="Enter postcode or street name">
                     <img id="do_search" src="pix/icon_search.png">
+                    <img id="ajax-loader" class="hidden" src="pix/ajax-loader.gif">
                 </form>
             </div>
             <div id="map">

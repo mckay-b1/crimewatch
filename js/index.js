@@ -1,15 +1,18 @@
-function generateMap(data) {
-    $('#map').show();
-    $('#map').gmap({'zoom': 2, 'disableDefaultUI': false}).bind('init', function(e, map) {
-        for (var i = 0; i < data.length; i++) {
-            $('#map').gmap('addMarker', {'position': new google.maps.LatLng(data[i].location.latitude,data[i].location.longitude)}).click(function() {
-			$('#map_canvas').gmap('openInfoWindow', { content : 'Hello world!' }, this);
-            });
-        }
-        $('#map').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
+function generateMap(data, geometry) {
+    $('#map').slideDown('400', 'linear', function() {
+        var center = new google.maps.LatLng(geometry.lat, geometry.lng);    
         
+        $('#map').gmap({'zoom': 13, 'center': center, 'disableDefaultUI': false}).bind('init', function(e, map) {
+            for (var i = 0; i < data.length; i++) {
+                var position = new google.maps.LatLng(data[i].location.latitude,data[i].location.longitude);
+                $('#map').gmap('addMarker', {'position': position})
+            }
+            $('#map').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
+        });
+        $('#ajax-loader').addClass('hidden'); 
     });
 }
+
 
 function getCrimes(data) {
     var url = $('#search form').attr('action');
@@ -20,7 +23,7 @@ function getCrimes(data) {
         data: data,
         success: function() {
             var crimes = $.parseJSON(arguments[0]);
-            generateMap(crimes);
+            generateMap(crimes, data);
         },
         error: function() { 
         }
@@ -35,6 +38,7 @@ $(document).ready(function() {
         if ($('#search input').val().length === 0 ) {
             alert('Please enter a value before attempting to search!');
         } else {
+            $('#ajax-loader').removeClass('hidden');
             $('#search form').submit();
         }
     });
