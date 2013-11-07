@@ -14,19 +14,53 @@
     <body>
 	<header>
             <h1>Crime <img id="crosshair" src="pix/crosshair.png"><span class="alt">Watch</span></h1>
-            <p id="tagline">Promoting vigilance and safety for your community</p>
+            <h3 id="tagline">Promoting vigilance and safety for your community</h3>
+            <div id="social">
+                <img src="pix/facebook.png">
+                <img src="pix/twitter.png">
+                <img src="pix/googleplus.png">
+            </div>
             <div id="banner"></div>
 	</header>
         <div id="content">
             <div id="search">
                 <form name="search" method="post" action="ajax/search.php">
                     <input type="text" name="address" placeholder="Enter postcode or street name">
-                    <img id="do_search" src="pix/icon_search.png">
+                    <img id="do-search" src="pix/icon_search.png">
                     <img id="ajax-loader" class="hidden" src="pix/ajax-loader.gif">
                 </form>
             </div>
-            <div id="map">
-                
+            <div id="map-container">
+                <div id="map-canvas">
+
+                </div>
+                <div id="map-panel">
+                    <table id="filters">
+                        <tr>
+                            <td><h3>Filters</h3></td>
+                        </tr>
+                        <tr>
+                            <td>Crime Type:</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="crime_type"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Month:</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="crime_date"></select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="clear"></div>
             </div>
         </div>
         <footer>Created by Barry McKay (B00556648)</footer>

@@ -241,6 +241,13 @@ Class PoliceUK{
     }
 
 
-
+/**
+ * function call "crimes-street-dates"
+ * @return array|false
+ * @link http://data.police.uk/api/crimes-street-dates/
+ */
+    public function crime_street_dates(){
+        return $this->call("crimes-street-dates");
+    }
 }
 
