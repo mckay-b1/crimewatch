@@ -23,47 +23,42 @@
             <div id="banner"></div>
 	</header>
         <div id="content">
+            <input type="hidden" id="addressLat" value="" />
+            <input type="hidden" id="addressLng" value="" />
+            <input type="hidden" id="crimeType" value="" />
+            <input type="hidden" id="crimeDate" value="" />
+            <div id="feedback" class="hide"></div>
             <div id="search">
-                <form name="search" method="post" action="ajax/search.php">
-                    <input type="text" name="address" placeholder="Enter postcode or street name">
+                <form name="search" method="POST" action="">
+                    <input type="text" name="address" placeholder="Enter address or postcode">
                     <img id="do-search" src="pix/icon_search.png">
-                    <img id="ajax-loader" class="hidden" src="pix/ajax-loader.gif">
+                    <img class="ajaxLoader hidden" src="pix/ajax-loader.png">
                 </form>
             </div>
+            <p id="notice" class="outline">IMPORTANT NOTE: The crimes markers shown are only an approximation of where the actual crimes occurred, NOT the exact locations.</p>
             <div id="map-container">
-                <div id="map-canvas">
-
-                </div>
-                <div id="map-panel">
-                    <table id="filters">
-                        <tr>
-                            <td><h3>Filters</h3></td>
-                        </tr>
-                        <tr>
-                            <td>Crime Type:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select id="crime_type"></select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>Month:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select id="crime_date"></select>
-                            </td>
-                        </tr>
-                    </table>
+                <div id="resultsInfo" class="outline"></div>
+                <div class="vc"></div>
+                <div id="map-canvas"></div>
+                <div id="mapOverlay" class="hidden"></div>
+                <div id="mapPanel">
+                    <div id="filters">
+                        <h2>Filters</h2>
+                        <label>Crime Type:</label>
+                        <br>
+                        <select id="crimeTypesSelect"></select>
+                        <br><br>
+                        <label>Date:</label>
+                        <br>
+                        <select id="crimeDatesSelect"></select>
+                    </div>
+                    <hr>
+                    <div id="forceInformation"></div>
                 </div>
                 <div class="clear"></div>
             </div>
         </div>
-        <footer>Created by Barry McKay (B00556648)</footer>
+        <footer class="outline">Created by Barry McKay (B00556648)</footer>
     </body>
 </html>
 <?php

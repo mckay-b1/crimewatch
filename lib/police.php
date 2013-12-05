@@ -204,8 +204,11 @@ Class PoliceUK{
  * @return array|false
  * @link http://www.police.uk/api/docs/method/crime-categories/
  */
-    public function crime_categories(){
-        return $this->call("crime-categories");
+    public function crime_categories($date){
+        return $this->call(sprintf(
+            'crime-categories?date=%s',
+            $date
+        ));
     }
 
 
@@ -240,7 +243,8 @@ Class PoliceUK{
         ));
     }
 
-
+//EXTENSIONS TO CLASS
+    
 /**
  * function call "crimes-street-dates"
  * @return array|false
@@ -248,6 +252,26 @@ Class PoliceUK{
  */
     public function crime_street_dates(){
         return $this->call("crimes-street-dates");
+    }
+
+/**
+ * function call "crimes_at_location"
+ * @return array|false
+ * @link http://data.police.uk/api/crimes_at_location/
+ */
+    public function crimes_at_location($latitude, $longitude, $date=null) {
+        
+        $url = 'crimes-street/all-crime?lat=%s&lng=%s';
+        
+        if (isset($date) && !empty($date)) {
+            $url .= '&date='.$date;
+        }
+        
+        return $this->call(sprintf(
+            $url,
+            $latitude,
+            $longitude
+        ));
     }
 }
 

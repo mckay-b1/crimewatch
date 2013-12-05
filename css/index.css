@@ -2,6 +2,8 @@ body {
      background-image: url("../pix/bg.jpg");
      background-repeat: repeat;
      font-family: Calibri,Arial,sans-serif;
+     margin: 0px auto;
+     max-width: 960px;
 }
 
 header h1 {
@@ -13,7 +15,7 @@ header h1 {
 }
 
 header h1 span.alt {
-     color: #0066CC;
+     color: #007DC6;
 }
 
 header img#crosshair {
@@ -28,14 +30,14 @@ header h3#tagline {
 }
 
 header div#banner {
-     background: url("../pix/checkered.gif") repeat-x scroll left top transparent;
+     background: url("../pix/checkered.gif") repeat-x scroll left top #007DC6;
      height: 50px;
      width: 100%;
 }
 
 header div#social {
-    text-align: right;
-    width: 100%;
+     text-align: right;
+     width: 100%;
 }
 
 header div#social img {
@@ -43,8 +45,8 @@ header div#social img {
 }
 
 div#content {
-     background-color: #0066CC;
-     padding: 20px 0px;
+     background-color: #007DC6;
+     padding: 1%;
 }
 
 div#search {
@@ -53,6 +55,7 @@ div#search {
 }
 
 div#search form {
+     position: relative;
      text-align: center;
 }
 
@@ -82,16 +85,45 @@ img#do-search:hover {
      cursor: pointer;
 }
 
-img#ajax-loader {
-     left: 4px;
-     position: relative;
-     top: 8px;
+div#search .ajaxLoader {
+    float: right;
+    position: absolute;
+    right: 145px;
+    top: 16px;
+}
+
+div#feedback {
+    background-color: #FFBABA;
+    border: 1px solid;
+    color: #D8000C;
+    margin: 10px 0;
+    padding: 15px 10px 15px 50px;
+}
+
+p#notice {
+     color: #FFFFFF;
+     font-style: italic;
+     margin: 0px;
+     padding: 1%;
+     text-align: center;
+     width: 98%;
 }
 
 div#map-container {
+     display: block;
      height: 0px;
-     overflow: hidden;
-     width: 100%;
+    margin: 20px auto 0;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+
+div#map-container #resultsInfo {
+    color: #FFFFFF;
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: left;
 }
 
 div#map-canvas {
@@ -99,41 +131,97 @@ div#map-canvas {
      border: 4px solid #333333;
      float: left;
      height: 400px;
-     margin: 0px 0px 0px 1%;
-     width: 79%;
+     width: 70%;
 }
 
-#map-panel {
-     background-color: #333333;
+#mapOverlay {
+     background-image: url("../pix/bg.jpg");
+     background-repeat: repeat;
      border-radius: 4px;
      border: 4px solid #333333;
-     color: #FFFFFF;
-     float: left;
-     font-weight: bold;
      height: 400px;
-     width: 18%;
+     left: 0px;
+     line-height: 400px;
+     opacity: 0.75;
+     position: absolute;
+     top: 33px;
+     width: 70%;
+}
+
+#mapOverlay h1 {
+     color: #FFFFFF;
+     display: block;
+     margin: auto 0px;
+     opacity: 1 ! important;
+     text-align: center;
+     text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
+}
+
+#mapPanel {
+    background-color: #333333;
+    border: 4px solid #333333;
+    border-radius: 4px;
+    color: #FFFFFF;
+    float: left;
+    font-weight: bold;
+    height: 390px;
+    overflow: auto;
+    padding: 10px 0 0;
+    position: relative;
+    text-align: left;
+    width: 28%;
+}
+
+#mapPanel #filters .ajaxLoader {
+    float: right;
+     position: absolute;
+     height: 28px;
+     left: 8px;
+     top: 8px;
+}
+
+#mapPanel #filters select {
+    min-width: 54%;
+}
+
+#mapPanel h2 {
+    color: #007DC6;
+    margin: 0px 0px 10px;
+    text-align: center;
+}
+
+#mapPanel #forceInformation h3 {
+    margin: 10px 0 5px 0;
+}
+
+#mapPanel #forceInformation a {
+    color: #007DC6;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#mapPanel #forceInformation a:hover {
+    text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
+    text-decoration: underline;
 }
 
 #crime_type {
      width: 100%;
 }
 
-table#filters h3 {
-     text-align: center;
-     text-decoration: underline;
-}
-
 div.inf-wdw {
-     font-size: 12pt ! important;
-     height: 150px;
-     width: 300px;
+    font-size: 12pt !important;
+    height: 120px;
+    text-align: left;
+    width: 300px;
 }
 
 footer {
-     color: #FFFFFF;
-     font-weight: bold;
-     margin: 20px 0px;
-     text-align: center;
+    color: #FFFFFF;
+    font-size: 20pt;
+    font-weight: bold;
+    margin: 20px 0;
+    text-align: center;
 }
 
 .hidden {
@@ -146,4 +234,8 @@ footer {
 
 .clear {
      clear: both;
+}
+
+.outline {
+     text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
 }
