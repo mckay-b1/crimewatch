@@ -181,6 +181,7 @@ div#map-canvas {
 }
 
 #mapPanel #filters select {
+    max-width: 96%;
     min-width: 54%;
 }
 
@@ -211,9 +212,9 @@ div#map-canvas {
 
 div.inf-wdw {
     font-size: 12pt !important;
-    height: 120px;
+    height: 140px;
     text-align: left;
-    width: 300px;
+    width: 360px;
 }
 
 footer {

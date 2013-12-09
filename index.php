@@ -23,6 +23,7 @@
             <div id="banner"></div>
 	</header>
         <div id="content">
+            <input type="hidden" id="address" value="" />
             <input type="hidden" id="addressLat" value="" />
             <input type="hidden" id="addressLng" value="" />
             <input type="hidden" id="crimeType" value="" />
