@@ -79,15 +79,16 @@ if (isset($_POST['geometry']) &&
             $new_crime->street = lcfirst($crime['location']['street']['name']);
             
             //Logic needs to be inplace to prevent marker overlapping for crimes with the same exactly lat/lng
-            //This will be achieved by padding the lng by 0.0001
-            $padding = 0.0;
-            
+            //This will be achieved by padding the lng by 0.00005
+
             //Loop through the existing crimes
+            $padding = 0.0;
             foreach ($crimeData as $k=>$v) {
-                //If this crimes lat/lng is the same as the current crime, buffer it
+                //If this crimes lat/lng is the same as the current crime, pad it
+                
                 if ($crimeData[$k]->location->latitude == $crime['location']['latitude'] &&
-                        $crimeData[$k]->location->longitude == $crime['location']['longitude']) {
-                    $padding = 0.0001;
+                        $crimeData[$k]->location->longitude == $crime['location']['longitude']+$padding) {
+                    $padding += 0.00005;
                 }
             }
             

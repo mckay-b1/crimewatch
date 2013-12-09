@@ -50,6 +50,7 @@ function addMarkers(data, category) {
             $('#map-canvas').gmap('addMarker', markerOptions).click(makeInfoWindowEvent(content));
         }
     }
+    
     //Apply the Markerclusterer plugin to the new set of markers
     $('#map-canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer($('#map-canvas').gmap('get', 'map'), $('#map-canvas').gmap('get', 'markers'), {
         maxZoom: 15
