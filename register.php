@@ -130,7 +130,7 @@
             echo '</div>';
         }
 
-        $mysqli->close($mysqli);
+        $mysqli->close();
 ?>
 
 <?php
