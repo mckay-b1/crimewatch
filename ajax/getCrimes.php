@@ -3,15 +3,15 @@ require_once('../lib/police.php');
 
 $POLICE = new PoliceUK();
 
-if (isset($_POST['geometry']) &&
-        (isset($_POST['geometry']['lat']) && (!empty($_POST['geometry']['lat']))) &&
-        (isset($_POST['geometry']['lng']) && (!empty($_POST['geometry']['lng'])))) {
-    $lat = $_POST['geometry']['lat'];
-    $lng = $_POST['geometry']['lng'];
+$lat = filter_input(INPUT_POST, 'lat');
+$lng = filter_input(INPUT_POST, 'lng');
+$crimeDate = filter_input(INPUT_POST, 'crimeDate');
 
-    if (isset($_POST['crimeDate']) && !empty($_POST['crimeDate'])) {
-        $crimeDate = $_POST['crimeDate'];
-    } else {
+//Ensure lat/lng values have been posted as these are crucial to the functionality of this script
+if ((isset($lat) && !empty($lat)) &&
+        (isset($lng) && !empty($lng))) {
+    
+    if (!isset($crimeDate) || empty($crimeDate)) {
         //Retrieve and convert latest crime data date to 'YYYY-MM' format
         $crimeDate = date("Y-m", strtotime($POLICE->lastupdated()));
     }
@@ -52,6 +52,8 @@ if (isset($_POST['geometry']) &&
                 'light-red'     =>'CC3333',
                 'light-green'   =>'33CC33',
                 'light-blue'    =>'33CCCC',
+                'light-yellow'  =>'FFEE9F',
+                'light-pink'    =>'EFD1EF',
                 'grey'          =>'888888',
                 'white'         =>'FFFFFF',
                 'black'         =>'000000'
@@ -136,12 +138,12 @@ if (isset($_POST['geometry']) &&
     } else {
         //Populate the response array
         $response['success']        = 0;
-        $response['message']        = 'Unfortunately there was no data found in our system for this area.';
+        $response['message']        = 'Unfortunately there was no data found in our system for this area. Please note that crime data is not available for Scotland.';
     }
 } else {
     //Populate the response array
     $response['success']        = 0;
-    $response['message']        = 'An error occured! Missing location data!';
+    $response['message']        = 'ERROR: Missing location lat/lng data! Please contact the site administrator.';
 }
 
 echo json_encode($response);

@@ -1,9 +1,10 @@
 body {
-     background-image: url("../pix/bg.jpg");
-     background-repeat: repeat;
-     font-family: Calibri,Arial,sans-serif;
-     margin: 0px auto;
-     max-width: 960px;
+    background-image: url("../pix/bg.jpg");
+    background-repeat: repeat;
+    font-family: Calibri, Arial, sans-serif !important;
+    margin: 0 auto;
+    max-width: 960px;
+    position: relative;
 }
 
 header h1 {
@@ -29,6 +30,58 @@ header h3#tagline {
      padding: 0px 0px 0px 10px;
 }
 
+header div#login {
+    background-color: #007DC6;
+    color: #FFFFFF;
+    float: right;
+    max-width: 250px;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
+
+header div#login div#loginError {
+    background-color: #FFBABA;
+    border: 1px solid #FF0000;
+    color: #FF0000;
+    font-size: 12pt;
+    font-style: italic;
+    font-weight: bold;
+    margin: 0 0 2%;
+    padding: 2%;
+    text-align: left;
+    width: 96%;
+}
+
+header div#login input {
+    margin-bottom: 5px;
+}
+
+header div#login input[type=text],
+header div#login input[type=password] {
+    border: solid 1px #AAAAAA;
+}
+
+header div#login a#register {
+    bottom: 14px;
+    left: 10px;
+    position: absolute;
+}
+
+header div#login .ajaxLoader {
+    margin: 0 10px;
+    position: relative;
+    top: 10px;
+    width: 40px;
+}
+
+header div#login form#logoutForm p {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
 header div#banner {
      background: url("../pix/checkered.gif") repeat-x scroll left top #007DC6;
      height: 50px;
@@ -36,7 +89,7 @@ header div#banner {
 }
 
 header div#social {
-     text-align: right;
+     text-align: left;
      width: 100%;
 }
 
@@ -44,9 +97,37 @@ header div#social img {
      width: 50px;
 }
 
+form#login {
+    font-weight: bold;
+}
+
+form#login a {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+form#login a:hover {
+    text-decoration: underline;
+    text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
+}
+
+form#login input[type=submit] {
+    font-weight: bold;
+}
+
+form#login input[type=text]:focus,
+form#login input[type=password]:focus {
+    border: solid 2px #393939;
+}
+
 div#content {
-     background-color: #007DC6;
-     padding: 1%;
+    background-color: #007DC6;
+    color: white;
+    min-height: 400px;
+    padding: 1%;
+    text-align: center;
 }
 
 div#search {
@@ -54,7 +135,7 @@ div#search {
      width: 100%;
 }
 
-div#search form {
+div#search #searchForm {
      position: relative;
      text-align: center;
 }
@@ -70,19 +151,26 @@ div#search input {
      width: 50%;
 }
 
-img#do-search {
+img#searchButton {
      background-color: #333333;
      border-radius: 4px;
      border: 4px solid #FFFFFF;
+     box-shadow: 6px 4px 2px #393939;
      padding: 4px;
      position: relative;
-     top: 16px;
+     top: 14px;
      width: 25px;
 }
 
-img#do-search:hover {
-     box-shadow: 2px 2px 2px #333333;
+img#searchButton:hover {
      cursor: pointer;
+}
+
+img#searchButton:active {
+    background-color: #007DC6;
+    top: 18px;
+    left: 4px;
+    box-shadow: 2px 2px 1px #393939;
 }
 
 div#search .ajaxLoader {
@@ -109,24 +197,166 @@ p#notice {
      width: 98%;
 }
 
-div#map-container {
-     display: block;
-     height: 0px;
-    margin: 20px auto 0;
+form#registrationForm {
+    margin: 30px auto;
+    width: 300px;
+}
+
+form#registrationForm .label {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 14px;
+    margin: 0;
+}
+
+form#registrationForm div.field {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+form#registrationForm div.field input {
+    padding: 2%;
+    width: 96%;
+}
+
+form#registrationForm input[type=text]:focus,
+form#registrationForm input[type=password]:focus {
+    border: solid 2px #393939;
+}
+
+input[type=submit],
+input[type=button] {
+    background-color: #333333;
+    border: 4px solid #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 6px 4px 2px #393939;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 4px;
+}
+
+input[type=submit]:hover,
+input[type=button]:hover {
+    cursor: pointer;
+}
+
+input[type=submit]:active,
+input[type=button]:active {
+    background-color: #007DC6; 
+    position: relative;
+    top: 4px;
+    left: 4px;
+    box-shadow: 2px 2px 1px #393939;
+}
+
+input[type=submit]:hover {
+    cursor: pointer;
+}
+
+form#registrationForm input#submit {
+    display: block;
+    margin: 0 auto;
+}
+
+div.errorBox {
+    background-color: #FFBABA;
+    border: 1px solid;
+    color: #D8000C;
+    margin: 10px 0;
+    padding: 5px;
+    text-align: left;
+}
+
+div.errorBox h3 {
+    margin: 0;
+}
+
+div.errorBox ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+div#login .errorBox {
+    margin: 0 0 4px;
+}
+
+div#customLocations {
+    background-color: #333333;
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 20px;
+    text-align: left;
+    width: 30%;
+}
+
+div#customLocations h2 {
+    margin: 0 0 10px;
+}
+
+div#customLocations ul {
+    margin: 10px 0;
+}
+
+div#customLocations ul li {
+
+}
+
+div#customLocations ul li span:hover {
+    cursor: pointer;
+    text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
+    text-decoration: underline;
+}
+
+div#customLocations form input[type=submit] {
+    margin: 10px 0;
+}
+
+div#customLocations form img.ajaxLoader {
+    left: 6px;
+    position: relative;
+    top: 14px;
+}
+
+div#customLocations img.deleteLocation {
+    left: 10px;
+    position: relative;
+    top: 6px;
+    width: 25px;
+}
+
+div#customLocations img.deleteLocation:hover {
+    cursor: pointer;
+}
+
+div#customLocations img.deleteLocation:active {
+    box-shadow: 0;
+}
+
+div#customLocations form input[type=text] {
+    margin-bottom: 10px;
+    width: 98%;
+}
+
+div#mapContainer {
+    display: block;
+    height: 0px;
+    margin: 0 auto 20px;
     overflow: hidden;
     position: relative;
     text-align: center;
     width: 100%;
 }
 
-div#map-container #resultsInfo {
+div#resultsInfo {
     color: #FFFFFF;
     font-size: 20pt;
     font-weight: bold;
     text-align: left;
 }
 
-div#map-canvas {
+div#mapCanvas {
      border-radius: 4px;
      border: 4px solid #333333;
      float: left;
@@ -144,7 +374,7 @@ div#map-canvas {
      line-height: 400px;
      opacity: 0.75;
      position: absolute;
-     top: 33px;
+     top: 0;
      width: 70%;
 }
 
@@ -181,6 +411,8 @@ div#map-canvas {
 }
 
 #mapPanel #filters select {
+    display: block;
+    margin-bottom: 20px;
     max-width: 96%;
     min-width: 54%;
 }
@@ -195,13 +427,22 @@ div#map-canvas {
     margin: 10px 0 5px 0;
 }
 
+#mapPanel #forceInformation .forceName {
+    font-weight: bold;
+}
+
 #mapPanel #forceInformation a {
     color: #007DC6;
+    text-decoration: none;
+}
+
+a {
+    color: #FFFFFF;
     font-weight: bold;
     text-decoration: none;
 }
 
-#mapPanel #forceInformation a:hover {
+a:hover {
     text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
     text-decoration: underline;
 }
@@ -211,6 +452,7 @@ div#map-canvas {
 }
 
 div.inf-wdw {
+    color: #333333;
     font-size: 12pt !important;
     height: 140px;
     text-align: left;
@@ -239,4 +481,24 @@ footer {
 
 .outline {
      text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
+}
+
+#overlay {
+     visibility: hidden;
+     position: absolute;
+     left: 0px;
+     top: 0px;
+     width:100%;
+     height:100%;
+     text-align:center;
+     z-index: 1000;
+}
+
+#overlay div {
+     width:300px;
+     margin: 100px auto;
+     background-color: #fff;
+     border:1px solid #000;
+     padding:15px;
+     text-align:center;
 }

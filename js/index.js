@@ -1,6 +1,10 @@
-function makeInfoWindowEvent(content) {  
+var crimeData;
+var forceData;
+var categoryData;
+
+function createInfoWindowEvent(content) {  
     return function() {
-        $('#map-canvas').gmap('openInfoWindow', {content: content}, this);
+        $('#mapCanvas').gmap('openInfoWindow', {content: content}, this);
     };  
  } 
 
@@ -14,7 +18,7 @@ function addMarkers(data, category) {
     }
     
     //Clear any existing markers from the map
-    $('#map-canvas').gmap('clear', 'markers');
+    $('#mapCanvas').gmap('clear', 'markers');
     
     //For each crime, add a marker to the map
     for (var i = 0; i < data.length; i++) {
@@ -47,30 +51,31 @@ function addMarkers(data, category) {
                 icon: icon
             }
 
-            $('#map-canvas').gmap('addMarker', markerOptions).click(makeInfoWindowEvent(content));
+            $('#mapCanvas').gmap('addMarker', markerOptions).click(createInfoWindowEvent(content));
         }
     }
     
     //Apply the Markerclusterer plugin to the new set of markers
-    $('#map-canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer($('#map-canvas').gmap('get', 'map'), $('#map-canvas').gmap('get', 'markers'), {
+    $('#mapCanvas').gmap('set', 'MarkerClusterer', new MarkerClusterer($('#mapCanvas').gmap('get', 'map'), $('#mapCanvas').gmap('get', 'markers'), {
         maxZoom: 15
     })); 
 }
 
 
-function generateMap(data, geometry) {
-    $('#map-canvas').gmap('destroy');
+function generateMap(data, lat, lng) {
+    $('#mapCanvas').gmap('destroy');
     
     //Center the map on the co-ordinates generated from the user's address input
-    var center = new google.maps.LatLng(geometry.lat, geometry.lng);
+    var center = new google.maps.LatLng(lat, lng);
       
     var mapOptions = {
-        zoom: 13,
         center: center,
-        disableDefaultUI: false
+        disableDefaultUI: false,
+        scrollwheel: false,
+        zoom: 13
     };
     
-    $('#map-canvas').gmap(mapOptions);
+    $('#mapCanvas').gmap(mapOptions);
     
     //Create a circle to show area covered by search (1 mile/1609.344m radius)
     var circleOptions = {
@@ -83,13 +88,11 @@ function generateMap(data, geometry) {
         radius: 1609.344
     };
     
-    $('#map-canvas').gmap('addShape', 'Circle', circleOptions);
+    $('#mapCanvas').gmap('addShape', 'Circle', circleOptions);
 }
 
 
 function getCrimes(params) {
-    var url = "ajax/getCrimes.php";
-    
     //Declare the object to store the data to be returned from this function
     var returnData = {};
     returnData.crimeData = {};
@@ -99,7 +102,7 @@ function getCrimes(params) {
     returnData.success = "";
             
     $.ajax({
-        url : url,
+        url : 'ajax/getCrimes.php',
         type: 'POST',
         data: params,
         success: function(response) {
@@ -113,9 +116,6 @@ function getCrimes(params) {
             
             returnData.message = response.message;
             returnData.success = response.success;
-        },
-        error: function() {
-            //TODO - ADD ERROR HANDLING LOGIC
         },
         async: false
     });
@@ -154,9 +154,6 @@ function populateDates() {
                 $('#crimeDatesSelect').append($("<option />").val(crimeDates[i][0]).text(crimeDates[i][1]));
             }
         },
-        error: function() {
-            //TODO - ADD ERROR HANDLING LOGIC
-        },
         async: false
     });
 }
@@ -166,7 +163,7 @@ function populateForceInformation(forceData) {
     var html = '';
     
     html += '<h2>Force Information</h2>';
-    html += forceData.name;
+    html += '<span class="forceName">'+forceData.name+'</span>';
     
     if (forceData.description !== null) {
         html += forceData.description;
@@ -195,12 +192,26 @@ function geocode(address) {
             if (responseJSON.status==="ZERO_RESULTS") {
                 data = false;
             } else {
-                data.geometry = responseJSON.results[0].geometry.location;
-                data.address = responseJSON.results[0].formatted_address;
+                var result = responseJSON.results[0];
+                
+                //Filter out Scottish postcodes as these are not covered by the API
+                for (var i=0, len=result.address_components.length; i < len; i++) {
+                    //
+                    //Array of Scottish postcodes
+                    var scottish = ["AB","DD","DG","EH","FK","G","HS","IV","KA","KW","KY","ML","PA","PH","TD","ZE"];
+
+                    if (result.address_components[i].types === "postal_code") {
+                        if ($.inArray(result.address_components[i].long_name, scottish)) {
+                            alert("ERROR: SCOTLAND!!!");
+                            return false;  
+                        }
+                    }
+     
+                }
+                
+                data.geometry = result.geometry.location;
+                data.address = result.formatted_address;
             }
-        },
-        error: function() {
-            //TODO - ADD ERROR HANDLING LOGIC
         },
         async: false
     });
@@ -209,88 +220,277 @@ function geocode(address) {
 }
 
 
-$(document).ready(function() {
-    var crimeData;
+function buildMap(address) {
+    $('#search .ajaxLoader').toggleClass('hidden');
+    $('#resultsInfo').fadeOut();
     
-    //Event handler for search button click
-    $('#do-search').click(function() {
+    $('#mapContainer').animate({height: '0px', address: address}, 600, function(e) {
+        $('#mapOverlay').addClass('hidden');
+        $('#feedback').hide();
+            
+        //URL encode address
+        address = encodeURIComponent(address);
+
+        //Geocode address into into lat/lng data
+        var data = geocode(address);
+        var geometry = data.geometry;
+        address = data.address;
+
+        if (!data) {
+            //If no data was returned from attempted geocoding
+            $('#feedback').html('No data was found for the specified address! Please check that the address you entered is valid.');
+            $('#feedback').show();
+        } else {
+            $('#address').val(address);
+
+            //Store the geometry data in the hidden fields
+            $('#addressLat').val(geometry.lat);
+            $('#addressLng').val(geometry.lng);
+
+            var params = new Object();
+            params.lat = geometry.lat;
+            params.lng = geometry.lng;  
+
+            //Fetch the crimes for this lat/lng location
+            var data = getCrimes(params);
+
+            if (data.success) {
+                crimeData = data.crimeData;
+                forceData = data.forceData;
+                categoryData = data.categoryData;
+
+                generateMap(crimeData, params.lat, params.lng);
+                addMarkers(crimeData);
+
+                populateCategories(categoryData);
+                populateDates();
+                populateForceInformation(forceData);
+                
+                var date = $('#crimeDatesSelect option:selected').text();
+                var count = crimeData.length !== undefined ? crimeData.length : 0;
+
+                $('#resultsInfo').html('Showing '+count+' '+(count === 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
+                
+                setTimeout(function () {
+                    $('#mapContainer').animate({height: '410px'}, 600);
+                    $('#resultsInfo').fadeIn();
+                }, 1000);
+            } else {
+                $('#mapOverlay').toggleClass('hidden');
+                $('#feedback').html(data.message);
+                $('#feedback').show();
+            }
+        }
+        $('#search .ajaxLoader').toggleClass('hidden');
+    });
+}
+
+
+$(document).ready(function() {
+    
+    //Event handler for search form submit
+    $('#searchButton').click(function(e) {
         //Validate against empty input
         if ($('#search input').val().length === 0 ) {
             alert('Please enter a value before attempting to search!');
         } else {
-            $('#map-container').animate({height: '0px'}, 1000);
-            $('#search .ajaxLoader').toggleClass('hidden');
-            $('#search form').submit();
+            $('#searchForm').submit();
         }
     });
-
-    //Callback handler for form submit
-    $('#search form').submit(function(e) {
+    
+    //Event handler for login form submit
+    $('#loginForm').submit(function(e) { 
         e.preventDefault();
         
-        $('#map-container').animate({height: '0px'}, 600, function() {
-            //Code is embedded into animation callback to ensure animation works as previously it didn't
-            $('#mapOverlay').addClass('hidden');
-
-            $('#search .ajaxLoader').removeClass('hidden');
-
-            $('#feedback').hide();
-
-            //URL encode address
-            var address = encodeURIComponent($('#search form').serializeArray()[0].value);
+        var ajaxLoader = $('div#login .ajaxLoader');
+        ajaxLoader.removeClass('hidden');       
+        
+        var errorBox = $('div#login .errorBox');
+        errorBox.hide();
+        errorBox.html('');
+        var errorMessage = "";
+        
+        var emailField = $('div#login #emailInput');
+        var passwordField = $('div#login #passwordInput');
+        
+        emailField.css('border', '0');
+        passwordField.css('border', '0');
+        
+        if (emailField.val().length === 0 || passwordField.val().length === 0) {
             
-            //Geocode address into into lat/lng data
-            var data = geocode(address);
-            var geometry = data.geometry;
-            address = data.address;
-            
-            if (!data) {
-                //If no data was returned from attempted geocoding
-                $('#feedback').html('No data was found for the specified address! Please check that the address you entered is valid.');
-                $('#feedback').show();
-            } else {
-                $('#address').val(address);
-                
-                //Store the geometry data in the hidden fields
-                $('#addressLat').val(geometry.lat);
-                $('#addressLng').val(geometry.lng);
-
-                var params = new Object();
-                params.geometry = new Object();
-                params.geometry.lat = geometry.lat;
-                params.geometry.lng = geometry.lng;
-                
-                //Fetch the crimes for this lat/lng location
-                var data = getCrimes(params);
-
-                if (data.success) {
-                    crimeData = data.crimeData;
-                    var forceData = data.forceData;
-                    var categoryData = data.categoryData;
-
-                    generateMap(crimeData, params.geometry);
-                    addMarkers(crimeData);
-
-                    populateCategories(categoryData);
-                    populateDates();
-                    populateForceInformation(forceData);
-                    
-                    setTimeout(function () {
-                        $('#map-container').animate({height: '450px'}, 600);
-                    }, 1000);
-                    
-                    var date = $('#crimeDatesSelect option:selected').text();
-                    var count = crimeData.length !== undefined ? crimeData.length : 0;
-                    
-                    $('#map-container #resultsInfo').html('Showing '+count+' '+(count == 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
-                } else {
-                    $('#mapOverlay').toggleClass('hidden');
-                    $('#feedback').html('Unfortunately there was no data found in our system for this area.');
-                    $('#feedback').show();
-                }
+            if (emailField.val().length === 0) {
+                errorMessage += "Email field is blank!<br>";
+                emailField.css('border', 'solid 1px #FF0000');
             }
-            $('#search .ajaxLoader').toggleClass('hidden');
+            
+            if (passwordField.val().length === 0) {
+                errorMessage += "Password field is blank!";
+                passwordField.css('border', 'solid 1px #FF0000');
+            }
+
+            errorBox.html(errorMessage);
+            errorBox.show();
+            ajaxLoader.addClass('hidden');
+            return false;
+        } else {
+            $.ajax({
+                url : 'ajax/login.php',
+                type: 'POST',
+                data: $(this).serializeArray(),
+                success: function(response) {
+                    response = $.parseJSON(response);
+
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        //An error occurred
+                        errorBox.html(response.message);
+                        errorBox.show();
+                        passwordField.val('');
+                    }
+                    
+                    ajaxLoader.addClass('hidden');
+                },
+                async: false
+            });
+        }
+    });
+    
+    //Event handler for logout form submit
+    $('#logoutForm').submit(function(e) {
+        $.ajax({
+            url : 'ajax/login.php',
+            type: 'POST',
+            data: { logout: true },
+            success: function(response) {
+                location.reload();
+            },
+            async: false
         });
+    });
+    
+    
+    //Event handler for search form submit
+    $('#searchForm').submit(function(e) {
+        e.preventDefault();
+        
+        var address = $('#searchForm').serializeArray()[0].value;
+                    
+        buildMap(address);
+    });
+    
+    //Event handler for custom location form submit
+    $('form#addLocationForm').submit(function(e) {
+        e.preventDefault();
+        
+        var ajaxLoader =  $('#customLocations .ajaxLoader');
+        ajaxLoader.show();
+        
+        var errorMessage = "";
+        var errorBox = $('#customLocations .errorBox');
+        errorBox.hide();
+        errorBox.html("");
+        
+        var locName = $('form#addLocationForm #locName');
+        var locAddress = $('form#addLocationForm #locAddress');
+        
+        locName.css('border', 'none');
+        locAddress.css('border', 'none');
+        
+        //Validate against empty inputs
+        if (locName.val().length === 0 || locAddress.val().length === 0) {
+            if (locName.val().length === 0) {
+                errorMessage += "Please enter a name for your location!\n\n";
+                locName.css('border', 'solid 1px #FF0000');
+            }
+            
+            if (locAddress.val().length === 0) {
+                errorMessage += "Please enter an address/postcode for your location!\n";
+                locAddress.css('border', 'solid 1px #FF0000');
+            }
+
+            errorBox.html(errorMessage);
+            errorBox.show();
+            return false;
+        } else {
+            //Check address is valid
+            var geocoded = geocode(encodeURIComponent(locAddress.val()));
+            locAddress = geocoded.address;
+
+            if (!geocoded) {
+                //If no data was returned from attempted geocoding
+                alert('Invalid address/postcode entered! Please try again.');
+                return false;
+            }
+
+            var data = new Object();
+            data.name = locName.val();
+            data.address = locAddress;
+
+            $('form#addLocationForm img.ajaxLoader').removeClass('hidden');
+
+            //Add the location to the database
+            $.ajax({
+                url : 'ajax/addLocation.php',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    response = $.parseJSON(response);
+
+                    if (response.success) {
+                        $('#customLocations ul').html(response.locationsHTML);
+                        $('#customLocations form')[0].reset();
+                    } else {
+                        //An error occurred
+                        errorBox.show();
+                        errorBox.html(response.message);
+                    }
+
+                    $('form#addLocationForm img.ajaxLoader').addClass('hidden');
+
+                },
+                async: false
+            });
+        }
+    });
+    
+    $('#customLocations').delegate('ul li span', 'click', function(e) {
+        var address = $(this).attr('title');
+        
+        buildMap(address);
+    });
+    
+    $('#customLocations').delegate('img.deleteLocation', 'click', function(e) {
+        var name = $(this).siblings('span').html();
+        if (confirm('Are you sure you want to delete \''+name+'\' from your locations?')) {
+            var errorBox = $('#customLocations .errorBox');
+            errorBox.hide();
+            errorBox.html('');
+
+            var locationid = $(this).parent().attr('id').split('-')[1];
+
+            var data = new Object();
+            data.locationid = locationid;
+
+            $.ajax({
+                url : 'ajax/deleteLocation.php',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    response = $.parseJSON(response);
+
+                    if (response.success) {
+                        $('#customLocations ul').html(response.locationsHTML);
+                    } else {
+                        //An error occured
+                        errorBox.show();
+                        errorBox.html(response.message);
+                    }
+
+                },
+                async: false
+            });
+        }
     });
     
     $('#crimeTypesSelect, #crimeDatesSelect').change(function(e) {
@@ -302,9 +502,8 @@ $(document).ready(function() {
         $('#mapOverlay').removeClass('hidden');
             
         var params = new Object();
-        params.geometry = new Object();
-        params.geometry.lat = $('#addressLat').val();
-        params.geometry.lng = $('#addressLng').val();
+        params.lat = $('#addressLat').val();
+        params.lng = $('#addressLng').val();
         params.crimeType = $('#crimeType').val();
         params.crimeDate = $('#crimeDate').val();
         
@@ -325,14 +524,14 @@ $(document).ready(function() {
             $('#mapOverlay').addClass('hidden');
         }
         
-        generateMap(crimeData, params.geometry);
+        generateMap(crimeData, params.lat, params.lng);
         addMarkers(crimeData, params.crimeType);
         
         var address = $('#address').val();
         var date = $('#crimeDatesSelect option:selected').text();
         var count = crimeData.length !== undefined ? crimeData.length : 0;
   
-        $('#map-container #resultsInfo').html('Showing '+count+' '+(count == 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
+        $('#resultsInfo').html('Showing '+count+' '+(count === 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
         
     });
 

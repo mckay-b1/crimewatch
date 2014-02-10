@@ -1,27 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Crime Watch: Promoting vigilance and safety for your community</title>
-        <link rel="shortcut icon" href="pix/favicon.ico">
-        <link rel="stylesheet" href="css/index.css">
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmBHpA9W3ynxRqxF55RQBI3S76AUPZQuI&sensor=false"></script>
-        <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript" src="js/markerclusterer.js"></script>
-        <script type="text/javascript" src="js/jquery.ui.map.full.min.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-    </head>
-    <body>
-	<header>
-            <h1>Crime <img id="crosshair" src="pix/crosshair.png"><span class="alt">Watch</span></h1>
-            <h3 id="tagline">Promoting vigilance and safety for your community</h3>
-            <div id="social">
-                <img src="pix/facebook.png">
-                <img src="pix/twitter.png">
-                <img src="pix/googleplus.png">
-            </div>
-            <div id="banner"></div>
-	</header>
+<?php
+    require_once('config.php');
+    
+    include_once('header.php');
+?>
         <div id="content">
             <input type="hidden" id="address" value="" />
             <input type="hidden" id="addressLat" value="" />
@@ -30,27 +11,28 @@
             <input type="hidden" id="crimeDate" value="" />
             <div id="feedback" class="hide"></div>
             <div id="search">
-                <form name="search" method="POST" action="">
+                <form id="searchForm" method="POST" action="">
                     <input type="text" name="address" placeholder="Enter address or postcode">
-                    <img id="do-search" src="pix/icon_search.png">
+                    <img id="searchButton" src="pix/icon_search.png">
                     <img class="ajaxLoader hidden" src="pix/ajax-loader.png">
                 </form>
             </div>
-            <p id="notice" class="outline">IMPORTANT NOTE: The crimes markers shown are only an approximation of where the actual crimes occurred, NOT the exact locations.</p>
-            <div id="map-container">
-                <div id="resultsInfo" class="outline"></div>
+            <p id="notice" class="outline">
+                IMPORTANT NOTE:<br>The crimes markers shown are only an approximation of where the actual crimes occurred, NOT the exact locations.<br>
+                Crime data is available for England, Wales and Northern Ireland ONLY.<br>
+                Attempting to search outside these areas may produce an error.
+            </p>
+            <div id="resultsInfo" class="outline"></div>
+            <div id="mapContainer">
                 <div class="vc"></div>
-                <div id="map-canvas"></div>
+                <div id="mapCanvas"></div>
                 <div id="mapOverlay" class="hidden"></div>
                 <div id="mapPanel">
                     <div id="filters">
                         <h2>Filters</h2>
                         <label>Crime Type:</label>
-                        <br>
                         <select id="crimeTypesSelect"></select>
-                        <br><br>
                         <label>Date:</label>
-                        <br>
                         <select id="crimeDatesSelect"></select>
                     </div>
                     <hr>
@@ -58,14 +40,51 @@
                 </div>
                 <div class="clear"></div>
             </div>
-        </div>
-        <footer class="outline">Created by Barry McKay (B00556648)</footer>
-    </body>
-</html>
 <?php
+    //Check if the user is logged in
+    if (isset($_SESSION['userid']) && !empty($_SESSION['userid']) &&
+            isset($_SESSION['email']) && !empty($_SESSION['email']) &&
+            isset($_SESSION['firstname']) && !empty($_SESSION['firstname'])) {
+?>
+            <div id="customLocations">
+                <h2>My Custom Locations:</h2>
+                <ul>
+<?php
+    
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+    if ($mysqli->connect_errno) {
+        echo "ERROR: Database connection failed! ".$mysqli->connect_errno;
+    }
+
+    $sql = "SELECT * FROM locations WHERE user_id = '".$_SESSION['userid']."'";
+    $results = $mysqli->query($sql);
+
+    while ($row = $results->fetch_assoc()) {
+        echo "<li id=\"location-".$row['id']."\">";
+        echo "    <span title=\"".$row['address']."\">".$row['name']."</span>";
+        echo "    <img src=\"pix/delete.png\" class=\"deleteLocation\" />";
+        echo "</li>";
+    }
+
+    $mysqli->close();
+?>      
+                        
+                </ul>
+                <div class="errorBox hide"></div>
+                <form id="addLocationForm">
+                    <label for="locName">Location name:</label><br>
+                    <input type="text" name="locName" id="locName" /><br>
+                    <label for="locAddress">Location address/postcode:</label><br>
+                    <input type="text" name="locAddress" id="locAddress" /><br>
+                    <input type="submit" id="addLocationButton" value="Save location" />
+                    <img src="pix/ajax-loader.png" class="ajaxLoader hidden" />
+                </form>
+            </div>
+<?php
+    }
+?>
+        </div>
+<?php
+    include_once('footer.php');
 ?>
