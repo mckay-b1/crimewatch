@@ -30,7 +30,7 @@
             isset($_SESSION['firstname']) && !empty($_SESSION['firstname'])) {
         echo '<form id="logoutForm" method="POST" action="">';
         echo '    <p>Hi '.$_SESSION['firstname'].'</p>';
-        echo '    <input type="submit" value="Logout" />';
+        echo '    <input type="submit"  class="button" value="Logout" />';
         echo '</form>';
     } else {
 ?>
@@ -39,7 +39,7 @@
                     Email: <input type="text" id="emailInput" name="email" size="20" value="" /><br>
                     Password: <input type="password" id="passwordInput" name="password" size="20" value="" /><br>
                     <a href="register.php" id="register">Register</a>
-                    <input type="submit" value="Login" />
+                    <input type="submit" class="button" value="Login" />
                     <img class="ajaxLoader hidden" src="pix/ajax-loader.png" />
                 </form>
 <?php

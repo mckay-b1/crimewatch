@@ -194,20 +194,20 @@ function geocode(address) {
             } else {
                 var result = responseJSON.results[0];
                 
-                //Filter out Scottish postcodes as these are not covered by the API
-                for (var i=0, len=result.address_components.length; i < len; i++) {
-                    //
-                    //Array of Scottish postcodes
-                    var scottish = ["AB","DD","DG","EH","FK","G","HS","IV","KA","KW","KY","ML","PA","PH","TD","ZE"];
-
-                    if (result.address_components[i].types === "postal_code") {
-                        if ($.inArray(result.address_components[i].long_name, scottish)) {
-                            alert("ERROR: SCOTLAND!!!");
-                            return false;  
-                        }
-                    }
-     
-                }
+//                //Filter out Scottish postcodes as these are not covered by the API
+//                for (var i=0, len=result.address_components.length; i < len; i++) {
+//                    //
+//                    //Array of Scottish postcodes
+//                    var scottish = ["AB","DD","DG","EH","FK","G","HS","IV","KA","KW","KY","ML","PA","PH","TD","ZE"];
+//
+//                    if (result.address_components[i].types === "postal_code") {
+//                        if ($.inArray(result.address_components[i].long_name, scottish)) {
+//                            alert("ERROR: SCOTLAND!!!");
+//                            return false;  
+//                        }
+//                    }
+//     
+//                }
                 
                 data.geometry = result.geometry.location;
                 data.address = result.formatted_address;
@@ -220,69 +220,89 @@ function geocode(address) {
 }
 
 
-function buildMap(address) {
+function doBuildMap(data) {
+    $('#mapOverlay').addClass('hidden');
+    $('#feedback').hide();
+
+    var geometry = data.geometry;
+    var address = data.address;
+
+    $('#address').val(address);
+
+    //Store the geometry data in the hidden fields
+    $('#addressLat').val(geometry.lat);
+    $('#addressLng').val(geometry.lng);
+
+    var params = new Object();
+    params.lat = geometry.lat;
+    params.lng = geometry.lng;  
+
+    //Fetch the crimes for this lat/lng location
+    var data = getCrimes(params);
+
+    if (data.success) {
+        crimeData = data.crimeData;
+        forceData = data.forceData;
+        categoryData = data.categoryData;
+
+        generateMap(crimeData, params.lat, params.lng);
+        addMarkers(crimeData);
+
+        populateCategories(categoryData);
+        populateDates();
+        populateForceInformation(forceData);
+
+        var date = $('#crimeDatesSelect option:selected').text();
+        var count = crimeData.length !== undefined ? crimeData.length : 0;
+
+        $('#resultsInfo').html('Showing '+count+' '+(count === 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
+
+        setTimeout(function () {
+            $('#mapContainer').animate({height: '410px'}, 600);
+            $('#resultsInfo').fadeIn();
+        }, 1000);
+    } else {
+        $('#mapOverlay').toggleClass('hidden');
+        $('#feedback').html(data.message);
+        $('#feedback').show();
+    }
+    $('#search .ajaxLoader').toggleClass('hidden');
+}
+
+
+function buildMap(data) {
     $('#search .ajaxLoader').toggleClass('hidden');
     $('#resultsInfo').fadeOut();
     
-    $('#mapContainer').animate({height: '0px', address: address}, 600, function(e) {
-        $('#mapOverlay').addClass('hidden');
-        $('#feedback').hide();
-            
-        //URL encode address
-        address = encodeURIComponent(address);
-
-        //Geocode address into into lat/lng data
-        var data = geocode(address);
-        var geometry = data.geometry;
-        address = data.address;
-
-        if (!data) {
-            //If no data was returned from attempted geocoding
-            $('#feedback').html('No data was found for the specified address! Please check that the address you entered is valid.');
-            $('#feedback').show();
-        } else {
-            $('#address').val(address);
-
-            //Store the geometry data in the hidden fields
-            $('#addressLat').val(geometry.lat);
-            $('#addressLng').val(geometry.lng);
-
-            var params = new Object();
-            params.lat = geometry.lat;
-            params.lng = geometry.lng;  
-
-            //Fetch the crimes for this lat/lng location
-            var data = getCrimes(params);
-
-            if (data.success) {
-                crimeData = data.crimeData;
-                forceData = data.forceData;
-                categoryData = data.categoryData;
-
-                generateMap(crimeData, params.lat, params.lng);
-                addMarkers(crimeData);
-
-                populateCategories(categoryData);
-                populateDates();
-                populateForceInformation(forceData);
-                
-                var date = $('#crimeDatesSelect option:selected').text();
-                var count = crimeData.length !== undefined ? crimeData.length : 0;
-
-                $('#resultsInfo').html('Showing '+count+' '+(count === 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
-                
-                setTimeout(function () {
-                    $('#mapContainer').animate({height: '410px'}, 600);
-                    $('#resultsInfo').fadeIn();
-                }, 1000);
-            } else {
-                $('#mapOverlay').toggleClass('hidden');
-                $('#feedback').html(data.message);
-                $('#feedback').show();
-            }
-        }
-        $('#search .ajaxLoader').toggleClass('hidden');
+    $('#mapContainer').animate({height: '0px'}, 600, function(e) {
+        doBuildMap(data);
     });
+}
+
+
+function geolocateSearch(position) {
+    var data = new Object();
+
+    //Use Google's reverse geocoding service to get address
+    $.ajax({
+        url : 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&sensor=false',
+        type: 'GET',
+        success: function() {
+            var responseJSON = arguments[2].responseJSON;
+
+            if (responseJSON.status==="ZERO_RESULTS") {
+                data = false;
+            } else {
+                var result = responseJSON.results[0];
+
+                data.geometry = result.geometry.location;
+                data.address = result.formatted_address;
+            }
+        },
+        async: false
+    });
+
+    buildMap(data);
 }
 
 
@@ -295,6 +315,17 @@ $(document).ready(function() {
             alert('Please enter a value before attempting to search!');
         } else {
             $('#searchForm').submit();
+        }
+    });
+    
+    //Event handler for location sharing
+    $('#geolocateButton').click(function(e) {
+        e.preventDefault();
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(geolocateSearch);
+        } else {   
+            alert('Sorry, your browser doesn\'t support geolocation!');   
         }
     });
     
@@ -375,8 +406,21 @@ $(document).ready(function() {
         e.preventDefault();
         
         var address = $('#searchForm').serializeArray()[0].value;
-                    
-        buildMap(address);
+        
+        //URL encode address
+        address = encodeURIComponent(address);
+
+        //Geocode address into into lat/lng data
+        var data = geocode(address);
+        
+        if (!data) {
+            //If no data was returned from attempted geocoding
+            $('#feedback').html('No data was found for the specified address! Please check that the address you entered is valid.');
+            $('#feedback').show();
+            return false;
+        }
+        
+        buildMap(data);
     });
     
     //Event handler for custom location form submit
@@ -457,7 +501,20 @@ $(document).ready(function() {
     $('#customLocations').delegate('ul li span', 'click', function(e) {
         var address = $(this).attr('title');
         
-        buildMap(address);
+        //URL encode address
+        address = encodeURIComponent(address);
+
+        //Geocode address into into lat/lng data
+        var data = geocode(address);
+        
+        if (!data) {
+            //If no data was returned from attempted geocoding
+            $('#feedback').html('No data was found for the specified address! Please check that the address you entered is valid.');
+            $('#feedback').show();
+            return false;
+        }
+        
+        buildMap(data);
     });
     
     $('#customLocations').delegate('img.deleteLocation', 'click', function(e) {

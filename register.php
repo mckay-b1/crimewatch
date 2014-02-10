@@ -164,7 +164,7 @@
                     <input type="password" placeholder="" name="cPassword" class="value" id="cPasswordValue" value="">
                 </div>
                 
-                <input type="submit" value="Register" id="submit" name="submit">
+                <input type="submit" id="submit" class="button" name="submit" value="Register" >
             </form>
         </div>
 <?php
