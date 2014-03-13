@@ -15,7 +15,7 @@
                     <input type="text" name="address" placeholder="Enter address or postcode">
                     <img id="searchButton" class="button" src="pix/icon_search.png">
                     <img id="geolocateButton" class="button" src="pix/globe.png" title="Search using your current location" />
-                    <img class="ajaxLoader hidden" src="pix/ajax-loader.png">
+                    <img class="ajaxLoader hidden" src="pix/ajax-loader.gif">
                 </form>
             </div>
             <p id="notice" class="outline">
@@ -80,7 +80,7 @@
                     <label for="locAddress">Location address/postcode:</label><br>
                     <input type="text" name="locAddress" id="locAddress" /><br>
                     <input type="submit" id="addLocationButton" class="button" value="Save location" />
-                    <img src="pix/ajax-loader.png" class="ajaxLoader hidden" />
+                    <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
                 </form>
             </div>
 <?php

@@ -34,7 +34,7 @@ function addMarkers(data, category) {
 
             content.push('<div class="inf-wdw" id="inf-'+data[i].crime_id+'">');
             content.push('<img src="'+icon+'"/>');
-            content.push('<b>'+data[i].category.name+'</b><br>');
+            content.push('<b>'+data[i].category.nicename+'</b><br>');
 
             //Sometimes the API just returns 'on or near ' without a street name. Handle this
             if (data[i].street !=="" && data[i].street !== "on or near ") {
@@ -543,7 +543,7 @@ $(document).ready(function() {
         $('#crimeType').val($('#crimeTypesSelect').val());
         $('#crimeDate').val($('#crimeDatesSelect').val());
         
-        $('#mapOverlay').html('<img src="pix/ajax-loader.png" class="ajaxLoader">');
+        $('#mapOverlay').html('<img class="ajaxLoader" src="pix/ajax-loader.gif" />');
  
         $('#mapOverlay').removeClass('hidden');
             

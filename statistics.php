@@ -44,7 +44,7 @@ if ((isset($lat) && !empty($lat)) &&
             </select>
             <br>
             <input type="submit" id="datesButton" class="button" value="Get statistics" />
-            <img class="ajaxLoader hidden" src="pix/ajax-loader.png" />
+            <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
         </form>
         <div id="crimeLevels" class="hide">
             <h2 class="outline">Crime levels</h2>
@@ -73,7 +73,7 @@ if ((isset($lat) && !empty($lat)) &&
             <input id="searchValue" type="text" name="address" placeholder="Enter address or postcode">
             <img id="searchButton" class="button" src="pix/icon_search.png">
             <img id="geolocateButton" class="button" src="pix/globe.png" title="Search using your current location" />
-            <img class="ajaxLoader hidden" src="pix/ajax-loader.png">
+            <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
         </form>
 <?php
 }

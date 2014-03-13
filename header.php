@@ -60,7 +60,7 @@
                     Password: <input type="password" id="passwordInput" name="password" size="20" value="" /><br>
                     <a href="register.php" id="register">Register</a>
                     <input type="submit" class="button" value="Login" />
-                    <img class="ajaxLoader hidden" src="pix/ajax-loader.png" />
+                    <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
                 </form>
 <?php
     }
