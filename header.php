@@ -1,5 +1,7 @@
 <?php
     require_once('config.php');
+    
+    $currentPage = basename(filter_input(INPUT_SERVER, 'PHP_SELF'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,11 +10,29 @@
         <title>Crime Watch: Promoting vigilance and safety for your community</title>
         <link rel="shortcut icon" href="pix/favicon.ico">
         <link rel="stylesheet" href="css/index.css">
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmBHpA9W3ynxRqxF55RQBI3S76AUPZQuI&sensor=false"></script>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
-        <script type="text/javascript" src="js/markerclusterer.js"></script>
-        <script type="text/javascript" src="js/jquery.ui.map.full.min.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
+        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
+        
+<?php
+    if ($currentPage == "statistics.php") {
+?>
+        <link rel="stylesheet" href="css/statistics.css">
+        <script language="javascript" type="text/javascript" src="js/jquery-dateformat.min.js"></script>
+        <script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
+        <script language="javascript" type="text/javascript" src="js/flot/jquery.flot.axislabels.js"></script>
+        <script language="javascript" type="text/javascript" src="js/flot/jquery.flot.categories.min.js"></script>
+        <script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.min.js"></script>
+        <script language="javascript" type="text/javascript" src="js/flot/jquery.flot.tooltip.min.js"></script>
+        <script language="javascript" type="text/javascript" src="js/statistics.js"></script>
+<?php
+    } else {
+?>
+        <script language="javascript" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo GMAP_API_KEY;?>&sensor=false"></script>
+        <script language="javascript" type="text/javascript" src="js/markerclusterer.js"></script>
+        <script language="javascript" type="text/javascript" src="js/jquery.ui.map.full.min.js"></script>
+        <script language="javascript" type="text/javascript" src="js/index.js"></script>
+<?php
+    }
+?>
     </head>
     <body>
 	<header>

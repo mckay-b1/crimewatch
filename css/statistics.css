@@ -1,0 +1,199 @@
+.statisticsPage {
+    text-align: left;
+}
+
+.statisticsPage hr {
+    margin: 20px 0;
+}
+
+.statisticsPage h1 {
+    margin: 20px 0;
+}
+
+.statisticsPage h2 {
+    margin: 10px 0 0;
+    text-align: left;
+}
+
+.statisticsPage p {
+    font-style: italic;
+    margin: 0 0 10px;
+    text-align: left;
+}
+
+.statisticsPage #searchForm {
+    position: relative;
+}
+
+.statisticsPage #searchForm #searchValue {
+     border-radius: 4px;
+     border: 4px solid #333333;
+     font-family: Calibri,Arial,sans-serif;
+     font-size: 70%;
+     font-weight: bold;
+     height: 30px;
+     padding: 0px 0px 0px 10px;
+     width: 50%;
+}
+
+.statisticsPage #searchForm .ajaxLoader {
+    position: absolute;
+    right: 115px;
+    top: 16px;
+}
+
+.statisticsPage #currentAddress {
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.statisticsPage #changeAddress {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.statisticsPage #datesForm {
+    margin: 0 auto;
+    text-align: right;
+    width: 220px;
+}
+
+.statisticsPage #datesForm select {
+    margin-bottom: 5px;
+}
+
+.statisticsPage #datesForm #datesButton {
+    margin: 10px 0;
+}
+
+.statisticsPage #datesForm .ajaxLoader {
+    margin: 0 0 0 10px;
+    position: relative;
+    top: 10px;
+    width: 40px;
+}
+
+.statisticsPage #crimeLevelsChart,
+.statisticsPage #crimeTypesChart {
+    display: none;
+    height: 450px;
+    margin: 20px auto;
+    width: 90%;
+}
+
+.statisticsPage #statisticsData {
+    margin-bottom: 20px;
+}
+
+.statisticsPage #statisticsTable {
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 0;
+}
+
+.statisticsPage #statisticsTable tr:nth-child(odd) { 
+    background-color: #ffa978;
+}
+
+.statisticsPage #statisticsTable tr:nth-child(even) {
+    background-color: #FFFFFF;
+}
+
+.statisticsPage #statisticsTable td {
+    border-color: #333333;
+    border-image: none;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    color: #000000;
+    padding: 5px 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.statisticsPage #statisticsTable  tr:last-child td {
+    border-width: 0px 1px 0px 0px;
+}
+
+.statisticsPage #statisticsTable  tr td:last-child {
+    border-width: 0 1px 1px 0;
+}
+
+.statisticsPage #statisticsTable thead th,
+.statisticsPage #statisticsTable tbody th {
+    background-color: #C64900;
+    border-color: #333333;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 0 1px 1px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px 10px;
+}
+
+.statisticsPage #statisticsTable tbody th {
+    border-width: 0 1px 1px 2px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.statisticsPage #statisticsTable thead tr:first-child th:first-child {
+    background-color: #007DC6;
+    border-width: 0 0 1px 0;
+}
+
+.statisticsPage #statisticsTable tr:first-child th:last-child {
+    border-width: 1px;
+}
+
+.statisticsPage #statisticsTable tbody tr:last-child td,
+.statisticsPage #statisticsTable tbody tr td:last-child {
+    background-color: #666666;
+    border-width: 2px 0 1px 1px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align: right;
+}
+
+.statisticsPage #statisticsTable tbody tr:last-child td:first-child {
+    border-width: 1px 0 0 0;
+    background-color: #007DC6;
+}
+
+.statisticsPage #statisticsTable tbody tr td:last-child {
+    border-width: 1px 1px 1px 0;
+    text-align: left;
+}
+
+.statisticsPage #statisticsTable tbody tr:last-child td:last-child {
+    border-width: 2px 1px 1px;
+}
+
+/* Flot Charting plugin styling overrides */
+.flot-tick-label {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.axisLabels {
+    font-weight: bold;
+}
+
+#flotTip {
+    border: solid 2px #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 4px 4px 4px #333333;
+    background-color: #333333;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px;
+}
+
+#crimeTypesChart .legendLabel {
+    color: #FFFFFF;
+    text-align: left;
+}

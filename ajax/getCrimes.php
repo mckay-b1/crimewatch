@@ -1,7 +1,7 @@
 <?php
-require_once('../lib/police.php');
+require_once('../lib/myPolice.php');
 
-$POLICE = new PoliceUK();
+$POLICE = new myPoliceUK();
 
 $lat = filter_input(INPUT_POST, 'lat');
 $lng = filter_input(INPUT_POST, 'lng');
@@ -38,42 +38,8 @@ if ((isset($lat) && !empty($lat)) &&
 
             //Get all available categories from Police.uk server
             $categories = $POLICE->crime_categories($crimeDate);
-            
-            //Color palette array for category markers
-            $colors = array(
-                'red'           =>'660000',
-                'green'         =>'006600',
-                'blue'          =>'0066FF',
-                'yellow'        =>'FFD500',
-                'pink'          =>'CC33CC',
-                'orange'        =>'CC6633',
-                'purple'        =>'6633CC',
-                'brown'         =>'663300',
-                'light-red'     =>'CC3333',
-                'light-green'   =>'33CC33',
-                'light-blue'    =>'33CCCC',
-                'light-yellow'  =>'FFEE9F',
-                'light-pink'    =>'EFD1EF',
-                'grey'          =>'888888',
-                'white'         =>'FFFFFF',
-                'black'         =>'000000'
-            );
-            
-            //Dynamically assign colors to categories
-            foreach ($categories as $k=>$v) {
-                $keys = array_keys($colors);
-                $categories[$k]['color'] = $colors[$keys[$k]];
-            }
-            
-            foreach ($categories as $category) {
-                if ($category['url'] === $crime['category']) {
-                    //Setup category object for crime
-                    $new_crime->category = new stdClass();
-                    $new_crime->category->url = $category['url'];
-                    $new_crime->category->name = $category['name'];
-                    $new_crime->category->color = $category['color'];
-                }
-            }
+
+            $new_crime->category = $categories[$crime['category']];
 
             //Modify date from 2013-09 to September 2013
             $new_crime->month = date("F Y", strtotime($crime['month']));
@@ -116,7 +82,7 @@ if ((isset($lat) && !empty($lat)) &&
             } else {
                 $obj = new stdClass();
                 $obj->url = $data->category->url;
-                $obj->name = $data->category->name;
+                $obj->nicename = $data->category->nicename;
                 $obj->color = $data->category->color;
                 $obj->count = 1;
                 $categoryData[$data->category->url] = $obj;

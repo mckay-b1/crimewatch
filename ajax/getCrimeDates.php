@@ -1,7 +1,7 @@
 <?php
-require_once('../lib/police.php');
+require_once('../lib/myPolice.php');
 
-$POLICE = new PoliceUK();
+$POLICE = new myPoliceUK();
 
 $response = array(
     'success'=>0,

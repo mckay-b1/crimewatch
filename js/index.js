@@ -2,6 +2,7 @@ var crimeData;
 var forceData;
 var categoryData;
 
+
 function createInfoWindowEvent(content) {  
     return function() {
         $('#mapCanvas').gmap('openInfoWindow', {content: content}, this);
@@ -130,7 +131,7 @@ function populateCategories(categoryData) {
     $('#crimeTypesSelect').append($("<option />").val('').text('All'));
     
     $.each(categoryData, function() {
-        $('#crimeTypesSelect').append($("<option />").val(this.url).text(this.name+" ("+this.count+")"));
+        $('#crimeTypesSelect').append($("<option />").val(this.url).text(this.nicename+" ("+this.count+")"));
     });
     
 }
@@ -194,21 +195,6 @@ function geocode(address) {
             } else {
                 var result = responseJSON.results[0];
                 
-//                //Filter out Scottish postcodes as these are not covered by the API
-//                for (var i=0, len=result.address_components.length; i < len; i++) {
-//                    //
-//                    //Array of Scottish postcodes
-//                    var scottish = ["AB","DD","DG","EH","FK","G","HS","IV","KA","KW","KY","ML","PA","PH","TD","ZE"];
-//
-//                    if (result.address_components[i].types === "postal_code") {
-//                        if ($.inArray(result.address_components[i].long_name, scottish)) {
-//                            alert("ERROR: SCOTLAND!!!");
-//                            return false;  
-//                        }
-//                    }
-//     
-//                }
-                
                 data.geometry = result.geometry.location;
                 data.address = result.formatted_address;
             }
@@ -232,7 +218,9 @@ function doBuildMap(data) {
     //Store the geometry data in the hidden fields
     $('#addressLat').val(geometry.lat);
     $('#addressLng').val(geometry.lng);
-
+    
+    $('#viewStatistics').attr('href', '/statistics?lat='+geometry.lat+'&lng='+geometry.lng);
+    
     var params = new Object();
     params.lat = geometry.lat;
     params.lng = geometry.lng;  
@@ -497,6 +485,7 @@ $(document).ready(function() {
             });
         }
     });
+
     
     $('#customLocations').delegate('ul li span', 'click', function(e) {
         var address = $(this).attr('title');

@@ -35,6 +35,7 @@
                         <select id="crimeTypesSelect"></select>
                         <label>Date:</label>
                         <select id="crimeDatesSelect"></select>
+                        <h3><a id="viewStatistics" href="/statistics">View detailed statistics for this area</a></h3>
                     </div>
                     <hr>
                     <div id="forceInformation"></div>
