@@ -12,6 +12,31 @@ if (!function_exists('curl_init')) {
 
 Class myPoliceUK extends PoliceUK {
     
+    protected function call($url) {
+        $callurl = $this->baseUrl.$url;
+        $this->setopt(CURLOPT_URL, $callurl);
+        $result = curl_exec($this->curl);
+        $curlinfo = curl_getinfo($this->curl);
+        
+        if ($this->debug) {
+            $this->curlinfo = $curlinfo;
+        }
+        
+        if ($curlinfo['http_code'] == 200) {
+            if ($this->returnraw) {
+                return $result;
+            }
+            return json_decode($result, TRUE);
+        } else if ($curlinfo['http_code'] == 401) {
+            die('Username / Password Incorrect'.PHP_EOL);
+        } else if ($curlinfo['http_code'] == 404) {
+            error_log('PoliceUKAPI Error - '.$callurl);
+            return false;
+        } else {
+            return false;
+        }
+    }
+    
     public function crime_categories($date) {
         $categories = array();
         

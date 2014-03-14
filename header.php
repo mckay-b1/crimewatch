@@ -66,10 +66,10 @@
     }
 ?>
             </div>
-            <div id="social">
+<!--            <div id="social">
                 <img src="pix/facebook.png">
                 <img src="pix/twitter.png">
                 <img src="pix/googleplus.png">
-            </div>
+            </div>-->
             <div id="banner"></div>
 	</header>

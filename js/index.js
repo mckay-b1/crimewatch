@@ -175,7 +175,7 @@ function populateForceInformation(forceData) {
         html += '<a href="'+forceData.engagement_methods[i].url+'" title="'+forceData.engagement_methods[i].description.replace(/(<([^>]+)>)/ig, '')+'" target="_blank"><h3>'+forceData.engagement_methods[i].title.charAt(0).toUpperCase() + forceData.engagement_methods[i].title.slice(1)+'</h3></a>';
     }
 
-    $('#mapPanel div#forceInformation').html(html);
+    $('#forceInformation').html(html);
     
 } 
 
@@ -208,7 +208,7 @@ function geocode(address) {
 
 function doBuildMap(data) {
     $('#mapOverlay').addClass('hidden');
-    $('#feedback').hide();
+    $('#search .errorBox').hide();
 
     var geometry = data.geometry;
     var address = data.address;
@@ -247,12 +247,13 @@ function doBuildMap(data) {
 
         setTimeout(function () {
             $('#mapContainer').animate({height: '410px'}, 600);
+            $('#forceInformation').fadeIn();
             $('#resultsInfo').fadeIn();
         }, 1000);
     } else {
         $('#mapOverlay').toggleClass('hidden');
-        $('#feedback').html(data.message);
-        $('#feedback').show();
+        $('#search .errorBox').html(data.message);
+        $('#search .errorBox').show();
     }
     $('#search .ajaxLoader').toggleClass('hidden');
 }
@@ -261,6 +262,7 @@ function doBuildMap(data) {
 function buildMap(data) {
     $('#search .ajaxLoader').toggleClass('hidden');
     $('#resultsInfo').fadeOut();
+    $('#forceInformation').fadeOut();
     
     $('#mapContainer').animate({height: '0px'}, 600, function(e) {
         doBuildMap(data);
@@ -403,8 +405,8 @@ $(document).ready(function() {
         
         if (!data) {
             //If no data was returned from attempted geocoding
-            $('#feedback').html('No data was found for the specified address! Please check that the address you entered is valid.');
-            $('#feedback').show();
+            $('#search .errorBox').html('No data was found for the specified address! Please check that the address you entered is valid.');
+            $('#search .errorBox').show();
             return false;
         }
         
@@ -432,12 +434,12 @@ $(document).ready(function() {
         //Validate against empty inputs
         if (locName.val().length === 0 || locAddress.val().length === 0) {
             if (locName.val().length === 0) {
-                errorMessage += "Please enter a name for your location!\n\n";
+                errorMessage += "Please enter a name for your location!<br>";
                 locName.css('border', 'solid 1px #FF0000');
             }
             
             if (locAddress.val().length === 0) {
-                errorMessage += "Please enter an address/postcode for your location!\n";
+                errorMessage += "Please enter an address/postcode for your location!";
                 locAddress.css('border', 'solid 1px #FF0000');
             }
 
@@ -498,8 +500,8 @@ $(document).ready(function() {
         
         if (!data) {
             //If no data was returned from attempted geocoding
-            $('#feedback').html('No data was found for the specified address! Please check that the address you entered is valid.');
-            $('#feedback').show();
+            $('#search .errorBox').html('No data was found for the specified address! Please check that the address you entered is valid.');
+            $('#search .errorBox').show();
             return false;
         }
         

@@ -25,10 +25,17 @@ if ((isset($lat) && !empty($lat)) &&
     $forceData = array();
     $categoryData = array();
     
-    //Get the crimes from Police.uk server
+    //Locate the name of the Police force for this neighbourhood
+    $force = $POLICE->neighbourhood_locate($lat, $lng);
+    $force = $force['force'];
+    
+    //Get the crime data for this area
     $crimes = $POLICE->crimes_at_location($lat, $lng, $crimeDate);
     
-    if (count($crimes) > 0) {
+    if ($force && count($crimes) > 0) {
+        //Get the Police force information for this area
+        $forceData = $POLICE->force($force);
+        
         //Filter out necessary data, reformat and store in new array
         foreach ($crimes as $crime) {
             //Crime category/type filter - skip this crime if it a filter has been set and it's category doesn't match the filter
@@ -46,14 +53,11 @@ if ((isset($lat) && !empty($lat)) &&
 
             $new_crime->street = lcfirst($crime['location']['street']['name']);
             
-            //Logic needs to be inplace to prevent marker overlapping for crimes with the same exactly lat/lng
-            //This will be achieved by padding the lng by 0.00005
-
-            //Loop through the existing crimes
+            //Logic  to prevent marker overlapping for crimes with the same exact lat/lng
+            //This is achieved by padding the lng by 0.00005 each time this occurs
             $padding = 0.0;
             foreach ($crimeData as $k=>$v) {
                 //If this crimes lat/lng is the same as the current crime, pad it
-                
                 if ($crimeData[$k]->location->latitude == $crime['location']['latitude'] &&
                         $crimeData[$k]->location->longitude == $crime['location']['longitude']+$padding) {
                     $padding += 0.00005;
@@ -88,28 +92,19 @@ if ((isset($lat) && !empty($lat)) &&
                 $categoryData[$data->category->url] = $obj;
             }
         }
-        
-        //Get the Police force information for this area
-        $force = $POLICE->neighbourhood_locate($lat, $lng);
-        $force = $force['force'];
 
-        $forceData = $POLICE->force($force);
-        
-        //Populate the response array
         $response['success']        = 1;
         $response['message']        = 'Crimes retrieved successfully!';
         $response['crimeData']      = $crimeData;
         $response['forceData']      = $forceData;
         $response['categoryData']   = $categoryData;
     } else {
-        //Populate the response array
-        $response['success']        = 0;
-        $response['message']        = 'Unfortunately there was no data found in our system for this area. Please note that crime data is not available for Scotland.';
+        $response['success']    = 0;
+        $response['message']    = 'Unfortunately there was no data found in our system for this area.<br>Please note that crime data is only available for England, Wales and Northern Ireland.';
     }
 } else {
-    //Populate the response array
-    $response['success']        = 0;
-    $response['message']        = 'ERROR: Missing location lat/lng data! Please contact the site administrator.';
+    $response['success']    = 0;
+    $response['message']    = 'ERROR: Missing location lat/lng data! Please contact the site administrator.';
 }
 
 echo json_encode($response);

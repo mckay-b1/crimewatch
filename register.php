@@ -115,7 +115,8 @@
                 echo "</div>";
                 
                 $email = "";
-                //TODO - Potential for extending this functionality by having an email confirmation and password reset system. However sandbox and Dunluce server prevent emails from being sent.
+                //TODO - Potential for extending this functionality by having an email confirmation and password reset system.
+                //       However sandbox and Dunluce server prevent emails from being sent.
             } else {
                 echo("<h1>Registration failed due to the following error:<br>".$mysqli->error."</h1>");
             }
