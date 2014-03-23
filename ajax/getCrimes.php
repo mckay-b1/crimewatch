@@ -27,14 +27,16 @@ if ((isset($lat) && !empty($lat)) &&
     
     //Locate the name of the Police force for this neighbourhood
     $force = $POLICE->neighbourhood_locate($lat, $lng);
-    $force = $force['force'];
     
     //Get the crime data for this area
     $crimes = $POLICE->crimes_at_location($lat, $lng, $crimeDate);
     
     if ($force && count($crimes) > 0) {
         //Get the Police force information for this area
-        $forceData = $POLICE->force($force);
+        $forceData = $POLICE->force($force['force']);
+        
+        //Get the local policing team information for this area
+        $localTeamData = $POLICE->neighbourhood($force['force'], $force['neighbourhood']);
         
         //Filter out necessary data, reformat and store in new array
         foreach ($crimes as $crime) {
@@ -98,9 +100,10 @@ if ((isset($lat) && !empty($lat)) &&
         $response['crimeData']      = $crimeData;
         $response['forceData']      = $forceData;
         $response['categoryData']   = $categoryData;
+        $response['localTeamData']  = $localTeamData;
     } else {
         $response['success']    = 0;
-        $response['message']    = 'Unfortunately there was no data found in our system for this area.<br>Please note that crime data is only available for England, Wales and Northern Ireland.';
+        $response['message']    = 'Unfortunately there was no data found in our system for this area. Are you sure you entered a valid UK address?  ';
     }
 } else {
     $response['success']    = 0;

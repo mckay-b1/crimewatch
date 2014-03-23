@@ -24,28 +24,33 @@ include_once('header.php');
                 </form>
             </div>
             <div id="resultsInfo" class="outline"></div>
-            <div id="mapContainer">
-                <div class="vc"></div>
+            <div id="mapContainer" class="hidden">
                 <div id="mapCanvas"></div>
-                <div id="mapOverlay" class="hidden"></div>
-                <div id="mapPanel">
-                    <div id="filters">
-                        <h2>Filters</h2>
-                        <label>Crime Type:</label>
-                        <select id="crimeTypesSelect"></select>
-                        <label>Date:</label>
-                        <select id="crimeDatesSelect"></select>
-                        <a id="viewStatistics" href="/statistics">View detailed statistics for this area</a>
-                    </div>
-                    <hr>
-                    <?php
+                <div id="mapOverlay" class="hidden">
+                    <img class="ajaxLoader" src="pix/ajax-loader.gif" />
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div id="mapFilters" class="section hide">
+                <h2>Filters</h2>
+                <div>
+                    <label>Crime Type:</label>
+                    <select id="crimeTypesSelect"></select>
+                </div>
+                <div>
+                    <label>Date:</label>
+                    <select id="crimeDatesSelect"></select>
+                </div>
+                <a id="viewStatistics" href="/statistics">View detailed statistics for this area</a>
+            </div>
+            <?php
 //Check if the user is logged in
 if (isset($_SESSION['userid']) && !empty($_SESSION['userid']) &&
         isset($_SESSION['email']) && !empty($_SESSION['email']) &&
         isset($_SESSION['firstname']) && !empty($_SESSION['firstname'])) {
 ?>
-                    <div id="customLocations">
-                        <h2>My Custom Locations</h2>
+                    <div id="savedLocations" class="section">
+                        <h2>My Saved Locations</h2>
                         <ul>
 <?php
     
@@ -72,20 +77,21 @@ if (isset($_SESSION['userid']) && !empty($_SESSION['userid']) &&
                         <div class="errorBox hide"></div>
                         <form id="addLocationForm">
                             <label for="locName">Location name:</label><br>
-                            <input type="text" name="locName" id="locName" /><br>
+                            <input type="text" name="locName" id="locName" />
+                            <br>
                             <label for="locAddress">Location address/postcode:</label><br>
-                            <input type="text" name="locAddress" id="locAddress" /><br>
-                            <input type="submit" id="addLocationButton" class="button" value="Save location" />
-                            <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
+                            <input type="text" name="locAddress" id="locAddress" />
+                            <div style="text-align: center;">
+                                <input type="submit" id="addLocationButton" class="button" value="Save location" />
+                                <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
+                            </div>
                         </form>
                     </div>
 <?php
     }
 ?>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div id="forceInformation" class="hide"></div>
+            <div id="localTeamInfo" class="section hide"></div>
+            <div id="forceInfo" class="section hide"></div>
         </div>
 <?php
     include_once('footer.php');

@@ -1,7 +1,8 @@
 body {
-    background-image: url("../pix/bg.jpg");
-    background-repeat: repeat;
-    font-family: Calibri, Arial, sans-serif !important;
+    xbackground-image: url("../pix/bg.jpg");
+    xbackground-repeat: repeat;
+    background-color: #222222;
+    font-family: Metrophobic, Arial, sans-serif !important;
     margin: 0 auto;
     max-width: 960px;
 }
@@ -34,42 +35,41 @@ a:hover {
 }
 
 header {
+    margin: 20px 0 0 0;
     position: relative;
 }
 
-header h1 {
-     color: #FFFFFF;
-     float: left;
-     font-size: 60pt;
-     margin: 0px;
-     width: 100%;
+header #siteTitle {
+    color: #FFFFFF;
+    font-size: 60pt;
+    margin: 0px;
 }
 
-header h1 span.alt {
-     color: #007DC6;
+header #siteTitle span.alt {
+    color: #007DC6;
+}
+
+header #siteTitle:hover {
+    text-decoration: none;
 }
 
 header img#crosshair {
-     position: relative;
-     right: 4px;
-     top: 12px;
+    position: relative;
+    right: 4px;
+    top: 12px;
 }
 
-header h3#tagline {
+header h4#tagline {
      color: #FFFFFF;
+     margin: 10px 0;
      padding: 0px 0px 0px 10px;
 }
 
 header div#login {
     background-color: #007DC6;
     color: #FFFFFF;
-    float: right;
-    max-width: 250px;
-    padding: 10px;
-    position: absolute;
-    right: 0;
-    text-align: right;
-    top: 0;
+    padding: 1%;
+    width: 98%;
 }
 
 header div#login div#loginError {
@@ -85,54 +85,67 @@ header div#login div#loginError {
     width: 96%;
 }
 
-header div#login input {
-    margin-bottom: 5px;
+header #login #loginForm > *,
+header #login #loginForm div > *,
+header #login #logoutForm > *,
+header #login #logoutForm div > * {
+    display: inline-block;
+    vertical-align: middle;
 }
 
-header div#login input[type=text],
-header div#login input[type=password] {
+header #login #loginForm input[type=text],
+header #login #loginForm input[type=password] {
     border: solid 1px #AAAAAA;
+    margin-right: 10px;
 }
 
-header div#login a#register {
-    bottom: 14px;
-    left: 10px;
-    position: absolute;
-}
-
-header div#login .ajaxLoader {
-    margin: 0 10px;
-    position: relative;
-    top: 10px;
+header #login #loginForm .ajaxLoader {
+    margin: 0 15px;
     width: 40px;
 }
 
-header div#login form#logoutForm p {
-    font-size: 16pt;
-    font-weight: bold;
+header #login #logoutForm {
+    text-align: right;
+}
+
+header #login #logoutForm > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+header #login #logoutForm .button {
+    margin-left: 15px;
 }
 
 header div#banner {
     background: url("../pix/checkered.gif") repeat-x scroll left top #007DC6;
     height: 50px;
-    margin-top: 30px;
     width: 100%;
 }
 
 header div#social {
-     text-align: left;
-     width: 100%;
+    text-align: left;
+    width: 100%;
 }
 
 header div#social img {
-     width: 50px;
+    width: 50px;
 }
 
 footer {
     color: #FFFFFF;
     font-size: 20pt;
     font-weight: bold;
-    margin: 20px 0;
+}
+
+footer a {
+    display: block;
+    font-size: 16px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+footer h3 {
     text-align: center;
 }
 
@@ -165,7 +178,7 @@ div#content {
     background-color: #007DC6;
     color: #FFFFFF;
     min-height: 400px;
-    padding: 1%;
+    padding: 1% 1% 2%;
     position: relative;
     text-align: center;
 }
@@ -175,8 +188,7 @@ div#content {
 }
 
 div#search {
-     height: 70px;
-     width: 100%;
+    width: 100%;
 }
 
 div#search #searchForm {
@@ -185,9 +197,9 @@ div#search #searchForm {
 }
 
 div#search input {
-     border-radius: 4px;
-     border: 4px solid #333333;
-     font-family: Calibri,Arial,sans-serif;
+     border-radius: 5px;
+     border: 4px solid #222222;
+     font-family: Share Tech, Arial, sans-serif !important;
      font-size: 70%;
      font-weight: bold;
      height: 30px;
@@ -204,10 +216,9 @@ img#geolocateButton {
 }
 
 div#search .ajaxLoader {
-    float: right;
-    position: absolute;
-    right: 110px;
-    top: 16px;
+    left: 10px;
+    position: relative;
+    top: 15px;
 }
 
 div#feedback {
@@ -220,7 +231,6 @@ div#feedback {
 
 p#notice {
      color: #FFFFFF;
-     font-style: italic;
      margin: 0px;
      padding: 1%;
      text-align: center;
@@ -236,7 +246,7 @@ form#registrationForm .label {
     color: #FFFFFF;
     font-size: 14px;
     font-weight: bold;
-    line-height: 14px;
+    line-height: 18px;
     margin: 0;
 }
 
@@ -256,10 +266,10 @@ form#registrationForm input[type=password]:focus {
 }
 
 .button {
-    background-color: #333333;
+    background-color: #222222;
     border: 4px solid #FFFFFF;
-    border-radius: 4px;
-    box-shadow: 6px 4px 2px #393939;
+    border-radius: 5px;
+    box-shadow: 3px 3px 1px #393939;
     color: #FFFFFF;
     font-weight: bold;
     padding: 4px;
@@ -303,169 +313,148 @@ div#login .errorBox {
     margin: 0 0 4px;
 }
 
-div#customLocations {
-    background-color: #333333;
-    border-radius: 4px;
-    color: #FFFFFF;
-    font-weight: bold;
-    text-align: left;
-}
-
-div#customLocations ul {
+div#savedLocations ul {
     margin: 10px 0;
 }
 
-div#customLocations ul li span:hover {
+div#savedLocations ul li span:hover {
     cursor: pointer;
     text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
     text-decoration: underline;
 }
 
-div#customLocations form input[type=submit] {
-    display: block;
-    margin: 0 auto;
-}
-
-div#customLocations form img.ajaxLoader {
-    float: right;
-    left: -14px;
+div#savedLocations form img.ajaxLoader {
+    left: 10px;
     position: relative;
-    top: -33px;
+    top: 10px;
     width: 40px;
 }
 
-div#customLocations img.deleteLocation {
+div#savedLocations img.deleteLocation {
     left: 10px;
     position: relative;
     top: 6px;
     width: 25px;
 }
 
-div#customLocations img.deleteLocation:hover {
+div#savedLocations img.deleteLocation:hover {
     cursor: pointer;
 }
 
-div#customLocations img.deleteLocation:active {
+div#savedLocations img.deleteLocation:active {
     box-shadow: 0;
 }
 
-div#customLocations form input[type=text] {
+div#savedLocations form input[type=text] {
     margin-bottom: 10px;
-    width: 94%;
+    max-width: 90%;
+    width: 300px;
 }
 
 div#mapContainer {
-    display: block;
-    height: 0px;
-    margin: 0 auto 5px;
+    border: 5px solid #222222;
+    border-radius: 5px;
+    height: 0;
+    margin: 0 auto;
     overflow: hidden;
     position: relative;
     text-align: center;
-    width: 100%;
+    width: 98%;
 }
 
 div#resultsInfo {
     color: #FFFFFF;
     font-size: 16pt;
-    font-style: italic;
     font-weight: bold;
     margin: 20px 0 10px;
     text-align: left;
 }
 
 div#mapCanvas {
-     border-radius: 4px;
-     border: 4px solid #333333;
-     float: left;
-     height: 400px;
-     width: 70%;
+    float: left;
+    height: 530px;
+    width: 100%;
 }
 
 #mapOverlay {
-     background-image: url("../pix/bg.jpg");
-     background-repeat: repeat;
-     border-radius: 4px;
-     border: 4px solid #333333;
-     height: 400px;
-     left: 0px;
-     line-height: 400px;
-     opacity: 0.75;
-     position: absolute;
-     top: 0;
-     width: 70%;
+    background-image: url("../pix/bg.jpg");
+    background-repeat: repeat;
+    height: 530px;
+    left: 0;
+    line-height: 530px;
+    opacity: 0.75;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 #mapOverlay h1 {
      color: #FFFFFF;
      display: block;
      margin: auto 0px;
-     opacity: 1 ! important;
+     opacity: 1 !important;
      text-align: center;
      text-shadow: 0px 0px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 1px 1px 0px #000000;
 }
 
-#mapPanel {
-    background-color: #333333;
-    border: 4px solid #333333;
-    border-radius: 4px;
+.section {
+    background-color: #222222;
+    border-radius: 5px;
     color: #FFFFFF;
-    float: left;
-    font-weight: bold;
-    height: 390px;
-    overflow: auto;
-    padding: 10px 0 0;
-    position: relative;
+    margin: 10px auto 0;
+    padding: 1% 2%;
     text-align: left;
-    width: 28%;
+    width: 95%;
 }
 
-#mapPanel #filters .ajaxLoader {
-    float: right;
-     position: absolute;
-     height: 28px;
-     left: 8px;
-     top: 8px;
-}
-
-#mapPanel #filters select {
-    display: block;
-    margin-bottom: 20px;
-    max-width: 96%;
-    min-width: 54%;
-}
-
-#mapPanel #filters h3 {
-    text-align: center;
-}
-
-#mapPanel h2 {
+.section h2 {
     color: #007DC6;
-    margin: 0px 0px 10px;
-    text-align: center;
+    margin: 10px 0;
 }
 
-div#forceInformation {
-    background-color: #333333;
-    border-radius: 4px;
-    padding: 10px 20px;
-    text-align: left;
+.section h4 {
+    color: #007DC6;
+    margin: 10px 0;
 }
 
-div#forceInformation a {
+#mapFilters > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#mapFilters .ajaxLoader {
+    float: right;
+    position: absolute;
+    height: 28px;
+    left: 8px;
+    top: 8px;
+}
+
+#mapFilters select {
+    margin-right: 20px;
+}
+
+#mapFilters h2 {
+    color: #007DC6;
+    display: inline-block;
+    margin: 0 10px 0 0;
+}
+
+div#forceInfo a {
     color: #007DC6;
     text-decoration: none;
 }
 
-div#forceInformation h3 {
+div#forceInfo h3 {
     margin: 10px 0 5px 0;
 }
 
-div#forceInformation .forceName {
+div#forceInfo .forceName {
     font-weight: bold;
 }
 
 div.inf-wdw {
-    color: #333333;
+    color: #222222;
     font-size: 12pt !important;
     height: 140px;
     text-align: left;

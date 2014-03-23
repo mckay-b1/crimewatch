@@ -37,6 +37,7 @@ Class myPoliceUK extends PoliceUK {
         }
     }
     
+    
     public function crime_categories($date) {
         $categories = array();
         
@@ -78,10 +79,12 @@ Class myPoliceUK extends PoliceUK {
         
         return $categories;
     }
+    
 
     public function crime_street_dates(){
         return $this->call("crimes-street-dates");
     }
+    
 
     public function crimes_at_location($latitude, $longitude, $date=null) {
         
@@ -95,6 +98,15 @@ Class myPoliceUK extends PoliceUK {
             $url,
             $latitude,
             $longitude
+        ));
+    }
+    
+    
+    public function neighbourhood($force, $neighbourhood){
+        return $this->call(sprintf(
+            '%s/%s',
+            urlencode($force),
+            str_replace(' ', '%20', $neighbourhood)
         ));
     }
 }

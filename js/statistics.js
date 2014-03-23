@@ -424,4 +424,10 @@ $(document).ready(function() {
         ajaxLoader.addClass('hidden');
     });
     
+    //Event handler for 'Scroll to top' link
+    $('a#scrollTop').click(function() {
+        $('html').animate({scrollTop: 0}, 'slow');
+        return false;
+    });
+    
 });

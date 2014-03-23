@@ -9,7 +9,8 @@
         <meta charset="UTF-8">
         <title>Crime Watch: Promoting vigilance and safety for your community</title>
         <link rel="shortcut icon" href="pix/favicon.ico">
-        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Metrophobic">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
         <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
         
 <?php
@@ -36,8 +37,8 @@
     </head>
     <body>
 	<header>
-            <a href="<?php echo HOMEPAGE; ?>"><h1>Crime <img id="crosshair" src="pix/crosshair.png"><span class="alt">Watch</span></h1></a>
-            <h3 id="tagline">Promoting vigilance and safety for your community</h3>
+            <a id="siteTitle" href="<?php echo HOMEPAGE; ?>">Crime <img id="crosshair" src="pix/crosshair.png"><span class="alt">Watch</span></a>
+            <h4 id="tagline">Promoting vigilance and safety for your community</h4>
             <div id="login">
 <?php
     if (!isset($_SESSION)) {
@@ -49,18 +50,26 @@
             isset($_SESSION['email']) && !empty($_SESSION['email']) &&
             isset($_SESSION['firstname']) && !empty($_SESSION['firstname'])) {
         echo '<form id="logoutForm" method="POST" action="">';
-        echo '    <p>Hi '.$_SESSION['firstname'].'</p>';
+        echo '    Welcome '.$_SESSION['firstname'].'!';
         echo '    <input type="submit"  class="button" value="Logout" />';
         echo '</form>';
     } else {
 ?>
                 <div class="errorBox hide"></div>
                 <form id="loginForm" method="POST" action="">
-                    Email: <input type="text" id="emailInput" name="email" size="20" value="" /><br>
-                    Password: <input type="password" id="passwordInput" name="password" size="20" value="" /><br>
-                    <a href="register.php" id="register">Register</a>
-                    <input type="submit" class="button" value="Login" />
-                    <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
+                    <div>
+                        <label for="emailInput">Email:</label>
+                        <input type="text" id="emailInput" name="email" size="20" value="" />
+                    </div>
+                    <div>
+                        <label for="passwordInput">Password:</label>
+                        <input type="password" id="passwordInput" name="password" size="20" value="" />
+                    </div>
+                    <div>
+                        <input type="submit" class="button" value="Login" />
+                        <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
+                    </div>
+                    <a href="register.php" id="register">Register account</a>
                 </form>
 <?php
     }

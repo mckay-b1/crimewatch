@@ -1,6 +1,14 @@
 var crimeData;
 var forceData;
 var categoryData;
+var localTeamData;
+
+
+function ucfirst(str) {
+    str += '';
+    var f = str.charAt(0).toUpperCase();
+    return f + str.substr(1);
+}
 
 
 function createInfoWindowEvent(content) {  
@@ -72,8 +80,8 @@ function generateMap(data, lat, lng) {
     var mapOptions = {
         center: center,
         disableDefaultUI: false,
-        scrollwheel: false,
-        zoom: 13
+        scrollwheel: true,
+        zoom: 14
     };
     
     $('#mapCanvas').gmap(mapOptions);
@@ -99,6 +107,7 @@ function getCrimes(params) {
     returnData.crimeData = {};
     returnData.forceData = {};
     returnData.categoryData = {};
+    returnData.localTeamData = {};
     returnData.message = "";
     returnData.success = "";
             
@@ -113,6 +122,7 @@ function getCrimes(params) {
                 returnData.crimeData = response.crimeData;
                 returnData.forceData = response.forceData;
                 returnData.categoryData = response.categoryData;
+                returnData.localTeamData = response.localTeamData;
             }
             
             returnData.message = response.message;
@@ -160,7 +170,7 @@ function populateDates() {
 }
 
 
-function populateForceInformation(forceData) {
+function populateForceInfo(forceData) {
     var html = '';
     
     html += '<h2>Force Information</h2>';
@@ -170,13 +180,60 @@ function populateForceInformation(forceData) {
         html += forceData.description;
     }
     
-    //Dynamically add each avaiable engagement method - The availability and format of these is very inconsistent across the board
-    for (var i = 0; i < forceData.engagement_methods.length; i++) {
-        html += '<a href="'+forceData.engagement_methods[i].url+'" title="'+forceData.engagement_methods[i].description.replace(/(<([^>]+)>)/ig, '')+'" target="_blank"><h3>'+forceData.engagement_methods[i].title.charAt(0).toUpperCase() + forceData.engagement_methods[i].title.slice(1)+'</h3></a>';
+    //Dynamically add each available engagement method - The availability and format of these is very inconsistent across the board
+    var em = forceData.engagement_methods;
+    for (var i = 0; i < em.length; i++) {
+        html += '<a href="'+em[i].url+'" title="'+em[i].description.replace(/(<([^>]+)>)/ig, '')+'" target="_blank"><h4>'+ucfirst(em[i].title)+'</h4></a>';
     }
 
-    $('#forceInformation').html(html);
+    $('#forceInfo').html(html);
     
+}
+
+function populateLocalTeamInfo(localTeamData) {
+    var html = '';
+    
+    html += '<h2>Your Local Policing Team</h2>';
+    html += '<a href="'+localTeamData.url_force+'" target="_blank"><h3>'+localTeamData.name+'</h3></a>';
+    
+    if (localTeamData.population !== null) {
+        html += '<p>Population: '+Number(localTeamData.population).toLocaleString('en')+'</p>';
+    }
+    
+    if (localTeamData.description !== null) {
+        html += localTeamData.description;
+    }
+    
+    //Dynamically add each available engagement method - The availability and format of these is very inconsistent across the board
+    if (localTeamData.contact_details !== undefined) {
+        $.each(localTeamData.contact_details, function(k,v) {
+            if (/^http:\/\//.test(v) || k === 'email') {
+                html += '<a href="'+v+'" title="'+ucfirst(k)+'" target="_blank"><h4>'+ucfirst(k)+'</h4></a>';
+            }
+
+            if (k === 'telephone') {
+                html += '<h4>'+ucfirst(k)+'</h4>';
+                html += v;
+            }
+        });
+    }
+    
+    if (localTeamData.locations !== undefined) {
+        $.each(localTeamData.locations, function() {      
+            if (this.type === 'station') {
+                if (this.description !== undefined) {
+                    html += '<h4>Police station</h4>';
+                    html += '<p>'+this.address+'</p>';
+                }
+                
+                if (this.description !== undefined) {
+                    html += this.description;
+                }
+            }
+        });
+    }
+    
+    $('#localTeamInfo').html(html);
 } 
 
 
@@ -232,39 +289,48 @@ function doBuildMap(data) {
         crimeData = data.crimeData;
         forceData = data.forceData;
         categoryData = data.categoryData;
+        localTeamData = data.localTeamData;
 
         generateMap(crimeData, params.lat, params.lng);
         addMarkers(crimeData);
 
         populateCategories(categoryData);
         populateDates();
-        populateForceInformation(forceData);
+        populateForceInfo(forceData);
+        populateLocalTeamInfo(localTeamData);
 
         var date = $('#crimeDatesSelect option:selected').text();
         var count = crimeData.length !== undefined ? crimeData.length : 0;
 
         $('#resultsInfo').html('Showing '+count+' '+(count === 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
 
-        setTimeout(function () {
-            $('#mapContainer').animate({height: '410px'}, 600);
-            $('#forceInformation').fadeIn();
-            $('#resultsInfo').fadeIn();
-        }, 1000);
+        $('#mapContainer').animate({height: '530px'}, 600, function() {
+            $('#resultsInfo').show();
+            $('#mapContainer').removeClass('hidden');
+            $('#mapFilters').show();
+            $('#forceInfo').show();
+            $('#localTeamInfo').show();
+        });
     } else {
         $('#mapOverlay').toggleClass('hidden');
         $('#search .errorBox').html(data.message);
         $('#search .errorBox').show();
     }
-    $('#search .ajaxLoader').toggleClass('hidden');
+    
+    $('#search .ajaxLoader').addClass('hidden');
 }
 
 
 function buildMap(data) {
-    $('#search .ajaxLoader').toggleClass('hidden');
-    $('#resultsInfo').fadeOut();
-    $('#forceInformation').fadeOut();
+    $('#search .ajaxLoader').removeClass('hidden');
     
-    $('#mapContainer').animate({height: '0px'}, 600, function(e) {
+    $('#mapContainer').animate({height: '0'}, 600, function() {
+        $('#resultsInfo').hide();
+        $('#mapContainer').addClass('hidden');
+        $('#mapFilters').hide();
+        $('#forceInfo').hide();
+        $('#localTeamInfo').hide();
+        
         doBuildMap(data);
     });
 }
@@ -300,13 +366,17 @@ $(document).ready(function() {
     
     //Event handler for search form submit
     $('#searchButton').click(function(e) {
+        $('#search .errorBox').hide();
+        
         //Validate against empty input
         if ($('#search input').val().length === 0 ) {
-            alert('Please enter a value before attempting to search!');
+            $('#search .errorBox').html('Please enter a value before attempting to search!');
+            $('#search .errorBox').show();
         } else {
             $('#searchForm').submit();
         }
     });
+    
     
     //Event handler for location sharing
     $('#geolocateButton').click(function(e) {
@@ -318,6 +388,7 @@ $(document).ready(function() {
             alert('Sorry, your browser doesn\'t support geolocation!');   
         }
     });
+    
     
     //Event handler for login form submit
     $('#loginForm').submit(function(e) { 
@@ -377,6 +448,7 @@ $(document).ready(function() {
         }
     });
     
+    
     //Event handler for logout form submit
     $('#logoutForm').submit(function(e) {
         $.ajax({
@@ -413,15 +485,16 @@ $(document).ready(function() {
         buildMap(data);
     });
     
+    
     //Event handler for custom location form submit
     $('form#addLocationForm').submit(function(e) {
         e.preventDefault();
         
-        var ajaxLoader =  $('#customLocations .ajaxLoader');
+        var ajaxLoader =  $('#savedLocations .ajaxLoader');
         ajaxLoader.show();
         
         var errorMessage = "";
-        var errorBox = $('#customLocations .errorBox');
+        var errorBox = $('#savedLocations .errorBox');
         errorBox.hide();
         errorBox.html("");
         
@@ -472,8 +545,8 @@ $(document).ready(function() {
                     response = $.parseJSON(response);
 
                     if (response.success) {
-                        $('#customLocations ul').html(response.locationsHTML);
-                        $('#customLocations form')[0].reset();
+                        $('#savedLocations ul').html(response.locationsHTML);
+                        $('#savedLocations form')[0].reset();
                     } else {
                         //An error occurred
                         errorBox.show();
@@ -489,7 +562,7 @@ $(document).ready(function() {
     });
 
     
-    $('#customLocations').delegate('ul li span', 'click', function(e) {
+    $('#savedLocations').delegate('ul li span', 'click', function(e) {
         var address = $(this).attr('title');
         
         //URL encode address
@@ -508,10 +581,11 @@ $(document).ready(function() {
         buildMap(data);
     });
     
-    $('#customLocations').delegate('img.deleteLocation', 'click', function(e) {
+    
+    $('#savedLocations').delegate('img.deleteLocation', 'click', function(e) {
         var name = $(this).siblings('span').html();
         if (confirm('Are you sure you want to delete \''+name+'\' from your locations?')) {
-            var errorBox = $('#customLocations .errorBox');
+            var errorBox = $('#savedLocations .errorBox');
             errorBox.hide();
             errorBox.html('');
 
@@ -528,7 +602,7 @@ $(document).ready(function() {
                     response = $.parseJSON(response);
 
                     if (response.success) {
-                        $('#customLocations ul').html(response.locationsHTML);
+                        $('#savedLocations ul').html(response.locationsHTML);
                     } else {
                         //An error occured
                         errorBox.show();
@@ -541,11 +615,10 @@ $(document).ready(function() {
         }
     });
     
+    
     $('#crimeTypesSelect, #crimeDatesSelect').change(function(e) {
         $('#crimeType').val($('#crimeTypesSelect').val());
         $('#crimeDate').val($('#crimeDatesSelect').val());
-        
-        $('#mapOverlay').html('<img class="ajaxLoader" src="pix/ajax-loader.gif" />');
  
         $('#mapOverlay').removeClass('hidden');
             
@@ -582,5 +655,11 @@ $(document).ready(function() {
         $('#resultsInfo').html('Showing '+count+' '+(count === 1 ? 'crime' : 'crimes')+' for '+address+' ('+date+')');
         
     });
-
+    
+    //Event handler for 'Scroll to top' link
+    $('a#scrollTop').click(function() {
+        $('html').animate({scrollTop: 0}, 'slow');
+        return false;
+    });
+    
 });
