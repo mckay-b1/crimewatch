@@ -11,7 +11,7 @@ include_once('header.php');
             <input type="hidden" id="crimeDate" value="" />
             <h1 class="outline" class="title">Search crimes</h1>
             <div id="notice">
-                <img src="/pix/exclamation.png" />
+                <img src="pix/exclamation.png" />
                 <p class="hide">
                     <b>IMPORTANT NOTE:</b><br>
                     The crimes markers shown are only an approximation of where the actual crimes occurred, NOT the exact locations.<br>
