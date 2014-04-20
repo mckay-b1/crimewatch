@@ -21,7 +21,7 @@ function reverseGeocode(lat, lng) {
     var address;
     
     $.ajax({
-        url : 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&sensor=false',
+        url : 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&sensor=false',
         type: 'GET',
         success: function() {
             var responseJSON = arguments[2].responseJSON;
@@ -213,7 +213,7 @@ function geocode(address) {
     
     //Use Google's geo-coding service to get lat/lng data for input
     $.ajax({
-        url : 'http://maps.googleapis.com/maps/api/geocode/json?address='+address+'&sensor=false',
+        url : 'https://maps.googleapis.com/maps/api/geocode/json?address='+address+'&sensor=false',
         type: 'GET',
         success: function() {
             var responseJSON = arguments[2].responseJSON;
@@ -246,7 +246,7 @@ $(document).ready(function() {
 
     //Declare/initialise variables and elements
     var errorMessage = "";
-    var errorBox = $('.statisticsPage .errorBox');
+    var errorBox = $('.page-statistics .errorBox');
     errorBox.hide();
     errorBox.html("");
     
@@ -384,7 +384,7 @@ $(document).ready(function() {
     });
     
     
-    $('.statisticsPage').delegate('#crimeLevelsFilter select', 'change', function(e) {
+    $('.page-statistics').delegate('#crimeLevelsFilter select', 'change', function(e) {
         ajaxLoader.removeClass('hidden');
         
         var selected = e.target.value;
@@ -406,7 +406,7 @@ $(document).ready(function() {
     });
     
         
-    $('.statisticsPage').delegate('#crimeTypesFilter select', 'change', function(e) {
+    $('.page-statistics').delegate('#crimeTypesFilter select', 'change', function(e) {
         ajaxLoader.removeClass('hidden');
         
         var selected = e.target.value;

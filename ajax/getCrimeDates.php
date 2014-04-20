@@ -1,6 +1,9 @@
 <?php
 require_once('../lib/myPolice.php');
 
+$lat = filter_input(INPUT_POST, 'lat');
+$lng = filter_input(INPUT_POST, 'lng');
+
 $POLICE = new myPoliceUK();
 
 $response = array(

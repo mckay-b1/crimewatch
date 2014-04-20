@@ -9,12 +9,25 @@
         <meta charset="UTF-8">
         <title>Crime Watch: Promoting vigilance and safety for your community</title>
         <link rel="shortcut icon" href="pix/favicon.ico">
-        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Metrophobic">
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Metrophobic">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
+        
+        <!-- ShareThis Scripts -->
+        <script type="text/javascript">var switchTo5x=true;</script>
+        <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+        <script type="text/javascript">
+            stLight.options({
+                publisher: "334161b4-6c0b-46a3-95c1-78ec4ddbb56a",
+                doNotHash: true,
+                doNotCopy: true,
+                hashAddressBar: false
+            });
+        </script>
+        
+        <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-2.1.0.js"></script>
         
 <?php
-    if ($currentPage == "statistics.php") {
+    if ($currentPage == "statistics.php" || $currentPage == "statistics") {
 ?>
         <link rel="stylesheet" href="css/statistics.css">
         <script language="javascript" type="text/javascript" src="js/jquery-dateformat.min.js"></script>
@@ -25,20 +38,33 @@
         <script language="javascript" type="text/javascript" src="js/flot/jquery.flot.tooltip.min.js"></script>
         <script language="javascript" type="text/javascript" src="js/statistics.js"></script>
 <?php
+    } else if ($currentPage == "login.php" ||
+            $currentPage == "login" ||
+            $currentPage == "register.php" ||
+            $currentPage == "register" ) {
+?>
+        <script language="javascript" type="text/javascript" src="js/index.js"></script>
+<?php
     } else {
 ?>
-        <script language="javascript" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo GMAP_API_KEY;?>&sensor=false"></script>
+        <script language="javascript" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
         <script language="javascript" type="text/javascript" src="js/markerclusterer.js"></script>
-        <script language="javascript" type="text/javascript" src="js/jquery.ui.map.full.min.js"></script>
-        <script language="javascript" type="text/javascript" src="js/index.js"></script>
+        <script language="javascript" type="text/javascript" src="js/index.js"></script> 
 <?php
     }
 ?>
     </head>
     <body>
 	<header>
-            <a id="siteTitle" href="<?php echo HOMEPAGE; ?>">Crime <img id="crosshair" src="pix/crosshair.png"><span class="alt">Watch</span></a>
+            <a id="siteTitle" href="<?php echo SITE_URL; ?>">Crime<img id="crosshair" src="pix/crosshair.png"><span class="alt">Watch</span></a>
             <h4 id="tagline">Promoting vigilance and safety for your community</h4>
+            <div id="social">
+                <span class='st_fblike_large' displayText='Facebook Like'></span>
+                <span class='st_facebook_large' displayText='Facebook'></span>
+                <span class='st_twitter_large' displayText='Tweet'></span>
+                <span class='st_googleplus_large' displayText='Google +'></span>
+                <span class='st_email_large' displayText='Email'></span>
+            </div>
             <div id="login">
 <?php
     if (!isset($_SESSION)) {
@@ -55,30 +81,12 @@
         echo '</form>';
     } else {
 ?>
-                <div class="errorBox hide"></div>
-                <form id="loginForm" method="POST" action="">
-                    <div>
-                        <label for="emailInput">Email:</label>
-                        <input type="text" id="emailInput" name="email" size="20" value="" />
-                    </div>
-                    <div>
-                        <label for="passwordInput">Password:</label>
-                        <input type="password" id="passwordInput" name="password" size="20" value="" />
-                    </div>
-                    <div>
-                        <input type="submit" class="button" value="Login" />
-                        <img class="ajaxLoader hidden" src="pix/ajax-loader.gif" />
-                    </div>
-                    <a href="register.php" id="register">Register account</a>
-                </form>
+        <a href="login.php">Login</a><span style="margin: 0 10px;">|</span> 
+        <a href="register.php">Register</a>
+
 <?php
     }
 ?>
             </div>
-<!--            <div id="social">
-                <img src="pix/facebook.png">
-                <img src="pix/twitter.png">
-                <img src="pix/googleplus.png">
-            </div>-->
             <div id="banner"></div>
 	</header>

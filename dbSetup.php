@@ -19,10 +19,11 @@
     
     $tables_sql []= "CREATE TABLE users (
 	id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	email VARCHAR(50) NOT NULL,
-	password VARCHAR(50) NOT NULL,
-	firstname VARCHAR(50) NOT NULL,
+	email VARCHAR(100) NOT NULL,
+	password VARCHAR(32) NOT NULL,
+	firstname VARCHAR(100) NOT NULL,
 	registration_date DATETIME NOT NULL,
+    activation_code VARCHAR(32) NOT NULL,
 	confirmed INT(1) UNSIGNED NOT NULL,
 	last_login DATETIME NOT NULL,
 	PRIMARY KEY (id)
@@ -42,28 +43,28 @@
     COLLATE='utf8_general_ci'
     ENGINE=InnoDB;";
         
-    $tables_sql []= "CREATE TABLE IF NOT EXISTS custom_areas (
-        id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-        user_id INT(10) UNSIGNED NOT NULL,
-        name VARCHAR(100) NOT NULL,
-        PRIMARY KEY (id),
-        INDEX FK_custom_areas_users (user_id),
-        CONSTRAINT FK_custom_areas_users FOREIGN KEY (user_id) REFERENCES users (id)
-    )
-    COLLATE='utf8_general_ci'
-    ENGINE=InnoDB;";
-            
-    $tables_sql []= "CREATE TABLE IF NOT EXISTS custom_areas_points (
-	id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	area_id INT(10) UNSIGNED NOT NULL,
-	lat FLOAT NOT NULL,
-	lng FLOAT NOT NULL,
-	PRIMARY KEY (id),
-	INDEX FK_custom_areas_points_custom_areas (area_id),
-	CONSTRAINT FK_custom_areas_points_custom_areas FOREIGN KEY (area_id) REFERENCES custom_areas (id)
-    )
-    COLLATE='utf8_general_ci'
-    ENGINE=InnoDB;";
+//    $tables_sql []= "CREATE TABLE IF NOT EXISTS custom_areas (
+//        id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+//        user_id INT(10) UNSIGNED NOT NULL,
+//        name VARCHAR(100) NOT NULL,
+//        PRIMARY KEY (id),
+//        INDEX FK_custom_areas_users (user_id),
+//        CONSTRAINT FK_custom_areas_users FOREIGN KEY (user_id) REFERENCES users (id)
+//    )
+//    COLLATE='utf8_general_ci'
+//    ENGINE=InnoDB;";
+//            
+//    $tables_sql []= "CREATE TABLE IF NOT EXISTS custom_areas_points (
+//	id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+//	area_id INT(10) UNSIGNED NOT NULL,
+//	lat FLOAT NOT NULL,
+//	lng FLOAT NOT NULL,
+//	PRIMARY KEY (id),
+//	INDEX FK_custom_areas_points_custom_areas (area_id),
+//	CONSTRAINT FK_custom_areas_points_custom_areas FOREIGN KEY (area_id) REFERENCES custom_areas (id)
+//    )
+//    COLLATE='utf8_general_ci'
+//    ENGINE=InnoDB;";
     
     foreach ($tables_sql as $sql) {
         if(!$mysqli->query($sql)){

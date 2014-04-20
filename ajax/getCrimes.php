@@ -46,7 +46,7 @@ if ((isset($lat) && !empty($lat)) &&
             $new_crime->crime_id = $crime['id'];
 
             //Get all available categories from Police.uk server
-            $categories = $POLICE->crime_categories($crimeDate);
+            $categories = $POLICE->crime_categories_with_date($crimeDate);
 
             $new_crime->category = $categories[$crime['category']];
 
@@ -103,7 +103,7 @@ if ((isset($lat) && !empty($lat)) &&
         $response['localTeamData']  = $localTeamData;
     } else {
         $response['success']    = 0;
-        $response['message']    = 'Unfortunately there was no data found in our system for this area. Are you sure you entered a valid UK address?  ';
+        $response['message']    = 'Unfortunately there was no data found in our system for this area. Are you sure you entered a valid UK address?';
     }
 } else {
     $response['success']    = 0;

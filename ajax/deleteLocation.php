@@ -46,17 +46,23 @@ if (!$result) {
 }
 
 //Generate the HTML to populate the locations list
+$locationsHTML = array();
+
 $sql = "SELECT * FROM locations WHERE user_id = '".$_SESSION['userid']."'";
 $results = $mysqli->query($sql);
 
-$locationsHTML = "";
-
-while ($row = $results->fetch_assoc()) {
-    $locationsHTML .= "<li id=\"location-".$row['id']."\">";
-    $locationsHTML .= "    <span title=\"".$row['address']."\">".$row['name']."</span>";
-    $locationsHTML .= "    <img src=\"pix/delete.png\" class=\"deleteLocation\" />";
-    $locationsHTML .= "</li>";
+if ($results->num_rows > 0) {
+    while ($row = $results->fetch_assoc()) {
+        $locationsHTML []= "<li id=\"location-".$row['id']."\">";
+        $locationsHTML []= "    <span title=\"".$row['address']."\">".$row['name']."</span>";
+        $locationsHTML []= "    <img src=\"pix/delete.png\" class=\"deleteLocation\" />";
+        $locationsHTML []= "</li>";
+    }
+} else {
+    $locationsHTML []= "You haven't saved any locations yet. You can add these using the form below.";
 }
+
+$locationsHTML = implode('', $locationsHTML);
 
 $mysqli->close();
 

@@ -37,8 +37,8 @@ Class myPoliceUK extends PoliceUK {
         }
     }
     
-    
-    public function crime_categories($date) {
+    //Used to be an overriding function, however PHP does not support overriding functions with different parameter lists
+    public function crime_categories_with_date($date) {
         $categories = array();
         
         //Color palette array for category markers
@@ -81,12 +81,7 @@ Class myPoliceUK extends PoliceUK {
     }
     
 
-    public function crime_street_dates(){
-        return $this->call("crimes-street-dates");
-    }
-    
-
-    public function crimes_at_location($latitude, $longitude, $date=null) {
+    public function crimes_at_location($lat, $lng, $date=null) {
         
         $url = 'crimes-street/all-crime?lat=%s&lng=%s';
         
@@ -96,9 +91,32 @@ Class myPoliceUK extends PoliceUK {
         
         return $this->call(sprintf(
             $url,
-            $latitude,
-            $longitude
+            $lat,
+            $lng
         ));
+    }
+    
+    
+    public function crime_street_dates(){
+        return $this->call("crimes-street-dates");
+    }
+    
+    
+    //Extension of the previous crime_street_dates function which returned dates
+    //for all data sets, ignoring the fact that some returned months contained
+    //no crime data. This function filters those empty months.
+    public function crime_street_dates_at_location($lat, $lng) {
+        $dates = $this->call("crimes-street-dates");
+        
+        foreach ($dates as $k=>$v) {
+            $crimes = $this->crimes_at_location($lat, $lng, $v['date']);
+            
+            if (count($crimes) <= 0) {
+                unset($dates[$k]);
+            }
+        }
+        
+        return $dates;
     }
     
     
@@ -109,5 +127,6 @@ Class myPoliceUK extends PoliceUK {
             str_replace(' ', '%20', $neighbourhood)
         ));
     }
+    
 }
 

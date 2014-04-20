@@ -3,15 +3,14 @@
 $lat = filter_input(INPUT_GET, 'lat');
 $lng = filter_input(INPUT_GET, 'lng');
 
-//require_once('lib/GChartPhp/gChart.php');
 require_once('header.php');
 
 require_once('lib/myPolice.php');
 
 $POLICE = new myPoliceUK();
 ?>
-    <div id="content" class="statisticsPage">
-        <h1 class="outline" id="statisticsPageTitle">Statistics</h1>
+    <div id="content" class="page-statistics">
+        <h1 class="outline" class="title">Get statistics</h1>
 
 <?php
 if ((isset($lat) && !empty($lat)) &&
@@ -20,7 +19,7 @@ if ((isset($lat) && !empty($lat)) &&
     $availableDates = $POLICE->crime_street_dates();
 ?>      
         <h3 class="outline" id="currentAddress"></h3>
-        <a id="changeAddress" href="/statistics">Change address</a>
+        <a id="changeAddress" href="<?php echo SITE_URL; ?>/statistics.php">Change address</a>
         <div class="errorBox hide"></div>
         <form id="datesForm">
             <input type="hidden" id="addressLat" name="lat" value="<?php echo $lat; ?>" />

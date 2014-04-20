@@ -34,7 +34,8 @@
     }
     
 ?>
-        <div id="content">
+        <div id="content" class="page-register">
+            <h1 class="outline">Register</h1>
 <?php
     if (isset($submit) &&
             $submit == "Register") {
@@ -101,22 +102,56 @@
         }
         
         if (empty($errors)) {
-            //no errors - insert record
+            //No errors so insert the user record
             $password = md5($password);
             $registration_date = date('Y-m-d H:i:s');
-
-            $sql = "INSERT INTO users (email, password, firstname, registration_date) VALUES ('".$email."', '".$password."', '".$firstname."', '".$registration_date."')";
-            $result = $mysqli->query($sql);
             
-            if ($result) {
-                echo "<h1>Registration successful! You may now login.</h1>";
-                echo "<br>";
-                echo "<a href=\"".HOMEPAGE."\">Click here to return to the homepage</a>";
-                echo "</div>";
-                
-                $email = "";
-                //TODO - Potential for extending this functionality by having an email confirmation and password reset system.
-                //       However sandbox and Dunluce server prevent emails from being sent.
+            // Create unique activation code
+            $activation_code = md5(uniqid(rand(), true));
+  
+            //The following commented code blocks relate to confirmation email functionality, which I am unable to implement on the Dunluce server. Alternative code is in place to bypass this.
+            
+//            if ($stmt = $mysqli->prepare("INSERT INTO users (email, password, firstname, registration_date, activation_code) VALUES (?, ?, ?, ?, ?)")) {
+//                $stmt->bind_param('sssss',
+//                    $email,
+//                    $password,
+//                    $firstname,
+//                    $registration_date,
+//                    $activation_code
+//                );
+            
+            $confirmed = 1;
+            
+            if ($stmt = $mysqli->prepare("INSERT INTO users (email, password, firstname, registration_date, activation_code, confirmed) VALUES (?, ?, ?, ?, ?, ?)")) {
+            $stmt->bind_param('sssssi',
+                $email,
+                $password,
+                $firstname,
+                $registration_date,
+                $activation_code,
+                $confirmed
+            );
+            
+                if ($result = $stmt->execute()) {
+//                    echo "<h1>Registration successful! You will receive an activation email shortly.</h1>";
+//                    echo "<br>";
+//                    echo "<a href=\"".SITE_URL."\">Click here to return to the homepage</a>";
+//                    echo "</div>";
+//
+//                    //Email the user their activation code
+//                    $message = "Hello $firstname,";
+//                    $message .= "Welcome to Crime Watch";
+//                    $message .= "To activate your account, please click on this link:\n\n";
+//                    $message .= SITE_URL."/activate.php?key=$activation_code";
+//
+//                    mail($email, 'Crime Watch - Account Activation', $message, 'From:'.SITE_EMAIL);
+                    echo "<h1>Registration successful! You may now login.</h1>";
+                    echo "<br>";
+                    echo "<a href=\"".SITE_URL."\">Click here to return to the homepage</a>";
+                    echo "</div>";
+                } else {
+                    echo("<h1>Registration failed due to the following error:<br>".$mysqli->error."</h1>");
+                }
             } else {
                 echo("<h1>Registration failed due to the following error:<br>".$mysqli->error."</h1>");
             }
@@ -139,7 +174,7 @@
     
     if (!isset($submit) || !empty($errors)) {
 ?>
-            <form id="registrationForm" action="register.php" method="post">
+            <form id="registrationForm" method="POST" action="register.php">
                 <div class="field" id="firstname">
                     <p class="label"><label for="firstnameValue">Enter your first name</label></p>
                     <input type="text" placeholder="" name="firstname" class="value" id="firstnameValue" value="<?php echo (isset($firstname) && !empty($firstname)) ? $firstname : '' ?>">

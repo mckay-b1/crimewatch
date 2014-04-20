@@ -45,8 +45,12 @@ header #siteTitle {
     margin: 0px;
 }
 
+header #siteTitle:hover {
+    text-shadow: none;
+}
+
 header #siteTitle span.alt {
-    color: #007DC6;
+    color: #004D79;
 }
 
 header #siteTitle:hover {
@@ -54,6 +58,7 @@ header #siteTitle:hover {
 }
 
 header img#crosshair {
+    margin: 0 5px 0 10px;
     position: relative;
     right: 4px;
     top: 12px;
@@ -66,7 +71,7 @@ header h4#tagline {
 }
 
 header div#login {
-    background-color: #007DC6;
+    background-color: #004D79;
     color: #FFFFFF;
     padding: 1%;
     width: 98%;
@@ -96,7 +101,8 @@ header #login #logoutForm div > * {
 header #login #loginForm input[type=text],
 header #login #loginForm input[type=password] {
     border: solid 1px #AAAAAA;
-    margin-right: 10px;
+    margin: 0 10px 0 5px;
+    padding-left: 5px;
 }
 
 header #login #loginForm .ajaxLoader {
@@ -118,13 +124,13 @@ header #login #logoutForm .button {
 }
 
 header div#banner {
-    background: url("../pix/checkered.gif") repeat-x scroll left top #007DC6;
+    background: url("../pix/checkered.gif") repeat-x scroll left top #004D79;
     height: 50px;
     width: 100%;
 }
 
 header div#social {
-    text-align: left;
+    text-align: right;
     width: 100%;
 }
 
@@ -138,14 +144,19 @@ footer {
     font-weight: bold;
 }
 
-footer a {
-    display: block;
+footer #scrollTop {
+    display: inline-block;
+    float: right;
     font-size: 16px;
-    text-align: right;
-    margin-right: 10px;
+    margin: 5px 10px 10px 0;
 }
 
 footer h3 {
+    text-align: center;
+}
+
+footer p {
+    font-size: 12pt;
     text-align: center;
 }
 
@@ -175,7 +186,7 @@ form#login input[type=password]:focus {
 }
 
 div#content {
-    background-color: #007DC6;
+    background-color: #004D79;
     color: #FFFFFF;
     min-height: 400px;
     padding: 1% 1% 2%;
@@ -183,7 +194,7 @@ div#content {
     text-align: center;
 }
 
-#indexPageTitle {
+.page-index .title {
     margin-bottom: 10px;
 }
 
@@ -203,6 +214,7 @@ div#search input {
      font-size: 70%;
      font-weight: bold;
      height: 30px;
+     min-width: 200px;
      padding: 0px 0px 0px 10px;
      width: 50%;
 }
@@ -229,7 +241,7 @@ div#feedback {
     padding: 15px 10px 15px 50px;
 }
 
-p#notice {
+div#notice p {
      color: #FFFFFF;
      margin: 0px;
      padding: 1%;
@@ -237,12 +249,26 @@ p#notice {
      width: 98%;
 }
 
-form#registrationForm {
+div#notice img {
+    border-radius: 15px;
+    box-shadow: 1px 1px 3px #393939;
+    display: block;
+    margin: 0 auto;
+    width: 30px;
+}
+
+div#notice img:hover {
+    cursor: pointer;
+}
+
+form#registrationForm,
+form#loginForm {
     margin: 30px auto;
     width: 300px;
 }
 
-form#registrationForm .label {
+form#registrationForm .label,
+form#loginForm .label {
     color: #FFFFFF;
     font-size: 14px;
     font-weight: bold;
@@ -250,18 +276,22 @@ form#registrationForm .label {
     margin: 0;
 }
 
-form#registrationForm div.field {
+form#registrationForm div.field,
+form#loginForm div.field{
     margin-bottom: 10px;
     width: 100%;
 }
 
-form#registrationForm div.field input {
+form#registrationForm div.field input,
+form#loginForm div.field input {
     padding: 2%;
     width: 96%;
 }
 
 form#registrationForm input[type=text]:focus,
-form#registrationForm input[type=password]:focus {
+form#registrationForm input[type=password]:focus,
+form#loginForm input[type=text]:focus,
+form#loginForm input[type=password]:focus{
     border: solid 2px #393939;
 }
 
@@ -281,7 +311,7 @@ form#registrationForm input[type=password]:focus {
 }
 
 .button:active {
-    background-color: #007DC6;
+    background-color: #004D79;
     left: 4px;
     box-shadow: 2px 2px 1px #393939;
 }
@@ -351,6 +381,19 @@ div#savedLocations form input[type=text] {
     width: 300px;
 }
 
+div#savedLocations #useCurrentLoc {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div#savedLocations #useCurrentLoc:hover {
+    cursor: pointer;
+}
+
 div#mapContainer {
     border: 5px solid #222222;
     border-radius: 5px;
@@ -364,9 +407,9 @@ div#mapContainer {
 
 div#resultsInfo {
     color: #FFFFFF;
-    font-size: 16pt;
+    font-size: 14pt;
     font-weight: bold;
-    margin: 20px 0 10px;
+    margin: 20px 0 5px;
     text-align: left;
 }
 
@@ -408,13 +451,18 @@ div#mapCanvas {
 }
 
 .section h2 {
-    color: #007DC6;
+    color: #004D79;
     margin: 10px 0;
 }
 
 .section h4 {
-    color: #007DC6;
+    color: #004D79;
     margin: 10px 0;
+}
+
+a#viewStatistics {
+    font-size: 14pt;
+    margin: 10px auto 0;
 }
 
 #mapFilters > * {
@@ -435,13 +483,13 @@ div#mapCanvas {
 }
 
 #mapFilters h2 {
-    color: #007DC6;
+    color: #004D79;
     display: inline-block;
     margin: 0 10px 0 0;
 }
 
 div#forceInfo a {
-    color: #007DC6;
+    color: #004D79;
     text-decoration: none;
 }
 

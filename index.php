@@ -3,17 +3,21 @@ require_once('config.php');
 
 include_once('header.php');
 ?>
-        <div id="content">
+        <div id="content" class="page-index">
             <input type="hidden" id="address" value="" />
             <input type="hidden" id="addressLat" value="" />
             <input type="hidden" id="addressLng" value="" />
             <input type="hidden" id="crimeType" value="" />
             <input type="hidden" id="crimeDate" value="" />
-            <h1 class="outline" id="indexPageTitle">Search crimes</h1>
-            <p id="notice" class="outline">
-                IMPORTANT NOTE:<br>The crimes markers shown are only an approximation of where the actual crimes occurred, NOT the exact locations.<br>
-                Crime data is available for England, Wales and Northern Ireland ONLY.
-            </p>
+            <h1 class="outline" class="title">Search crimes</h1>
+            <div id="notice">
+                <img src="/pix/exclamation.png" />
+                <p class="hide">
+                    <b>IMPORTANT NOTE:</b><br>
+                    The crimes markers shown are only an approximation of where the actual crimes occurred, NOT the exact locations.<br>
+                    Crime data is available for England, Wales and Northern Ireland ONLY.
+                </p>
+            </div>
             <div id="search">
                 <div class="errorBox hide"></div>
                 <form id="searchForm" method="POST" action="">
@@ -23,7 +27,7 @@ include_once('header.php');
                     <img class="ajaxLoader hidden" src="pix/ajax-loader.gif">
                 </form>
             </div>
-            <div id="resultsInfo" class="outline"></div>
+            <div id="resultsInfo" class=""></div>
             <div id="mapContainer" class="hidden">
                 <div id="mapCanvas"></div>
                 <div id="mapOverlay" class="hidden">
@@ -31,6 +35,7 @@ include_once('header.php');
                 </div>
             </div>
             <div class="clear"></div>
+            <a id="viewStatistics" class="hide" href="<?php echo SITE_URL; ?>/statistics.php" target="_blank" title="View detailed statistics for this area" >View detailed statistics for this area</a>
             <div id="mapFilters" class="section hide">
                 <h2>Filters</h2>
                 <div>
@@ -41,7 +46,6 @@ include_once('header.php');
                     <label>Date:</label>
                     <select id="crimeDatesSelect"></select>
                 </div>
-                <a id="viewStatistics" href="/statistics">View detailed statistics for this area</a>
             </div>
             <?php
 //Check if the user is logged in
@@ -62,12 +66,16 @@ if (isset($_SESSION['userid']) && !empty($_SESSION['userid']) &&
 
     $sql = "SELECT * FROM locations WHERE user_id = '".$_SESSION['userid']."'";
     $results = $mysqli->query($sql);
-
-    while ($row = $results->fetch_assoc()) {
-        echo "<li id=\"location-".$row['id']."\">";
-        echo "    <span title=\"".$row['address']."\">".$row['name']."</span>";
-        echo "    <img src=\"pix/delete.png\" class=\"deleteLocation\" />";
-        echo "</li>";
+    
+    if ($results->num_rows > 0) {
+        while ($row = $results->fetch_assoc()) {
+            echo "<li id=\"location-".$row['id']."\">";
+            echo "    <span title=\"".$row['address']."\">".$row['name']."</span>";
+            echo "    <img src=\"pix/delete.png\" class=\"deleteLocation\" />";
+            echo "</li>";
+        }
+    } else {
+        echo "You haven't saved any locations yet. You can add these using the form below.";
     }
 
     $mysqli->close();
