@@ -430,4 +430,10 @@ $(document).ready(function() {
         return false;
     });
     
+    //Event handler for 'Notice' icon
+    $('div#notice img').click(function() {
+        $(this).next('p').slideToggle();
+        return false;
+    });
+    
 });

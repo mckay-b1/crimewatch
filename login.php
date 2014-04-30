@@ -53,7 +53,7 @@ if (isset($submit) &&
     $email = $mysqli->real_escape_string($email);
     $password = $mysqli->real_escape_string($password);
 
-    $password = md5($password);
+    $password = md5(SALT.$password);
 
     $sql = "SELECT * FROM users WHERE email='$email' and password='$password' LIMIT 1";
     $result = $mysqli->query($sql);

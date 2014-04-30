@@ -103,7 +103,7 @@
         
         if (empty($errors)) {
             //No errors so insert the user record
-            $password = md5($password);
+            $password = md5(SALT.$password);
             $registration_date = date('Y-m-d H:i:s');
             
             // Create unique activation code

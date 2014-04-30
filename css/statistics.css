@@ -49,7 +49,16 @@
 
 .page-statistics #changeAddress {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.page-statistics #notice {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.page-statistics #notice p {
+    font-style: normal;
 }
 
 .page-statistics #datesForm {

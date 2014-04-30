@@ -20,6 +20,14 @@ if ((isset($lat) && !empty($lat)) &&
 ?>      
         <h3 class="outline" id="currentAddress"></h3>
         <a id="changeAddress" href="<?php echo SITE_URL; ?>/statistics.php">Change address</a>
+        <div id="notice">
+            <img src="pix/exclamation.png" />
+            <p class="hide">
+                <b>IMPORTANT NOTE:</b><br>
+                Some months in your chosen date range may not have any crime data stored.<br>
+                These months will be automatically omitted from generated graphs.
+            </p>
+        </div>
         <div class="errorBox hide"></div>
         <form id="datesForm">
             <input type="hidden" id="addressLat" name="lat" value="<?php echo $lat; ?>" />

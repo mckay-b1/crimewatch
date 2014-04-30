@@ -15,7 +15,7 @@ function ucfirst(str) {
 
 function deleteMarkers() {
     for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
+        markers[i].setMap(null);
     }
     
     markers = [];
@@ -129,38 +129,38 @@ function generateMap(data, lat, lng, category) {
     
     var radius = new google.maps.Circle(radiusOptions);
     
-    google.maps.event.addListener(radius, 'dragend', function(e) {
-        if(confirm('Would you like to search for crimes in the new location?')) {
-            var data = reverseGeocode(this.center.lat(), this.center.lng());
-            
-            $('#searchValue').val(data.address);
-            
-            buildMap(data);
-        } else {
-            resetRadius(map, radius, center);
-        }
-    });
-    
-    google.maps.event.addListener(radius, 'click', function(e) {
-        if (radius.draggable === false) {
-             radius.setOptions({draggable: true});
-        
-            this.setOptions({fillColor: '#C6001A'});
-            this.setOptions({strokeColor: '#C6001A'});
-        } else {
-            radius.setOptions({draggable: false});
-
-            radius.setOptions({fillColor: '#0033FF'});
-            radius.setOptions({strokeColor: '#0033FF'});
-        }
-    });
-    
-    google.maps.event.addListener(map, 'click', function(e) {
-        radius.setOptions({draggable: false});
-        
-        radius.setOptions({fillColor: '#0033FF'});
-        radius.setOptions({strokeColor: '#0033FF'});
-    });
+//    google.maps.event.addListener(radius, 'dragend', function(e) {
+//        if(confirm('Would you like to search for crimes in the new location?')) {
+//            var data = reverseGeocode(this.center.lat(), this.center.lng());
+//            
+//            $('#searchValue').val(data.address);
+//            
+//            buildMap(data);
+//        } else {
+//            resetRadius(map, radius, center);
+//        }
+//    });
+//    
+//    google.maps.event.addListener(radius, 'click', function(e) {
+//        if (radius.draggable === false) {
+//             radius.setOptions({draggable: true});
+//        
+//            this.setOptions({fillColor: '#C6001A'});
+//            this.setOptions({strokeColor: '#C6001A'});
+//        } else {
+//            radius.setOptions({draggable: false});
+//
+//            radius.setOptions({fillColor: '#0033FF'});
+//            radius.setOptions({strokeColor: '#0033FF'});
+//        }
+//    });
+//    
+//    google.maps.event.addListener(map, 'click', function(e) {
+//        radius.setOptions({draggable: false});
+//        
+//        radius.setOptions({fillColor: '#0033FF'});
+//        radius.setOptions({strokeColor: '#0033FF'});
+//    });
     
     addMarkers(map, data, category);
 }
@@ -378,7 +378,7 @@ function doBuildMap(data) {
     $('#addressLat').val(geometry.lat);
     $('#addressLng').val(geometry.lng);
     
-    $('#viewStatistics').attr('href', $('#viewStatistics').attr('href')+'?lat='+geometry.lat+'&lng='+geometry.lng);
+    $('#viewStatistics').attr('href', $('#viewStatistics').attr('href').split('?')[0]+'?lat='+geometry.lat+'&lng='+geometry.lng);
     
     var params = new Object();
     params.lat = geometry.lat;
@@ -691,7 +691,8 @@ $(document).ready(function() {
     $('#crimeTypesSelect, #crimeDatesSelect').change(function(e) {
         $('#crimeType').val($('#crimeTypesSelect').val());
         $('#crimeDate').val($('#crimeDatesSelect').val());
- 
+        
+        $('#mapOverlay').html('<img class="ajaxLoader" src="pix/ajax-loader.gif" />');
         $('#mapOverlay').removeClass('hidden');
             
         var params = new Object();
